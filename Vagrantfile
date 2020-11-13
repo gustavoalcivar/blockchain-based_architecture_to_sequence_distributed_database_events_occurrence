@@ -15,8 +15,8 @@ end
       node.vm.hostname = "node#{i}"
       node.vm.provision "shell", path: "scripts/node.sh", :args => ["#{i}", "#{ip_base}"]
       node.trigger.after :reload do |trigger|
-        trigger.info = "Start Blockchain Services"
-        trigger.run = {inline: "bash -c 'echo \"here run sudo docker-compose -f /vagrant/docker/docker-compose-#{i}.yaml up -d!!\"'"}
+        trigger.info = "Start Blockchain Services node#{i}"
+        trigger.run_remote = {inline: "sudo docker-compose -f /vagrant/docker/docker-compose-#{i}.yaml up -d"}
       end
     end
   end
