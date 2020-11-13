@@ -1,0 +1,3 @@
+{   
+    "ignore": ["lib/proto_processor/protos/*.proto", "lib/proto_processor/*.json"] 
+}

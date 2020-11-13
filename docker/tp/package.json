@@ -1,0 +1,15 @@
+{
+  "name": "tp",
+  "version": "0.0.1",
+  "description": "Transaction Processor",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Gustavo Alcívar",
+  "license": "ISC",
+  "dependencies": {
+    "cbor": "^5.1.0",
+    "sawtooth-sdk": "^1.0.5"
+  }
+}

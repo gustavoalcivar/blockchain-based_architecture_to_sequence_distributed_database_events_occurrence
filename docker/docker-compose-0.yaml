@@ -2,6 +2,7 @@ version: '3.6'
 
 volumes:
   pbft-shared:
+  mongo_data:
 
 services:
 
@@ -107,3 +108,78 @@ services:
     container_name: sawtooth-pbft-engine-0
     command: pbft-engine -vv --connect tcp://validator-0:5050
     stop_signal: SIGKILL
+
+# --------=== audit transaction processor ===--------
+
+  audit-tp-0:
+    image: audit-tp:latest
+    container_name: audit-tp-0
+    env_file: .env
+    environment:
+      - NODE=0
+    depends_on:
+      - validator-0
+    build:
+      context: ./tp
+      dockerfile: ../Dockerfile
+
+# --------=== blockchain client ===--------
+
+  client-0:
+    image: client
+    container_name: client-0
+    expose:
+      - ${CLIENT_PORT}
+    ports:
+      - "${CLIENT_PORT}:${CLIENT_PORT}"
+    env_file: .env
+    environment:
+      - NODE=0
+    depends_on:
+      - rest-api-0
+    build:
+      context: ./client
+      dockerfile: ../Dockerfile
+
+# --------=== blockchain frontend ===--------
+  
+  vue-js:
+    build:
+      context: ./web
+    ports:
+      - 8080:8080
+    environment:
+      - API_URL=http://localhost:3000/
+    depends_on:
+      - rest-api-0
+      - mongo-db
+
+# --------=== HL Explorer rest-api ===--------
+
+  express-js:
+    image: express-js
+    build:
+      context: ./api
+    ports:
+      - 3000:3000
+    depends_on: 
+      - mongo-db
+    environment:
+      - DATABASE_URL=mongo-db
+      - WAIT_HOSTS=mongo-db:27017
+      - NODE_ENV=development
+      - PORT=3000
+      - VALIDATOR_URL=tcp://validator-0:4004
+      - REST_API_URL=http://rest-api-0:8008
+
+# --------=== HL Explorer datadase ===--------
+
+  mongo-db:
+    container_name: mongo-db
+    image: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo_data:/data/db
+    depends_on:
+      - rest-api

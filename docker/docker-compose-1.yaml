@@ -72,3 +72,35 @@ services:
     container_name: sawtooth-pbft-engine-default-1
     command: pbft-engine -vv --connect tcp://validator-1:5050
     stop_signal: SIGKILL
+
+# --------=== audit transaction processor ===--------
+
+  audit-tp-1:
+    image: audit-tp:latest
+    container_name: audit-tp-1
+    env_file: .env
+    environment:
+      - NODE=1
+    depends_on:
+      - validator-1
+    build:
+      context: ./tp
+      dockerfile: ../Dockerfile
+
+# --------=== blockchain client ===--------
+
+  client-1:
+    image: client
+    container_name: client-1
+    expose:
+      - ${CLIENT_PORT}
+    ports:
+      - "${CLIENT_PORT}:${CLIENT_PORT}"
+    env_file: .env
+    environment:
+      - NODE=1
+    depends_on:
+      - rest-api-1
+    build:
+      context: ./client
+      dockerfile: ../Dockerfile

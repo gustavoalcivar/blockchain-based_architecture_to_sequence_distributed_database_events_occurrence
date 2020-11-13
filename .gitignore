@@ -1,3 +1,5 @@
 token
 .vagrant/
 docker/pbft-shared/
+interface/node_modules/
+interface/*.sql
