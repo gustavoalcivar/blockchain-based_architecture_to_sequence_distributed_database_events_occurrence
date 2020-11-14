@@ -4,6 +4,9 @@ volumes:
   pbft-shared:
   mongo_data:
 
+networks:
+  audit_network:
+
 services:
 
 # -------------=== rest api ===-------------
@@ -19,6 +22,8 @@ services:
           --connect tcp://validator-0:4004 \
           --bind rest-api-0:8008
       "
+    networks:
+      - audit_network
     stop_signal: SIGKILL
 
 # -------------=== settings tp ===-------------
@@ -29,6 +34,8 @@ services:
     expose:
       - 4004
     command: settings-tp -C tcp://validator-0:4004
+    networks:
+      - audit_network
     stop_signal: SIGKILL
 
 # -------------=== shell ===-------------
@@ -43,6 +50,8 @@ services:
         sawtooth keygen
         tail -f /dev/null
       "
+    networks:
+      - audit_network
     stop_signal: SIGKILL
 
 # -------------=== validators ===-------------
@@ -100,6 +109,8 @@ services:
           --peering static \
           --maximum-peer-connectivity 10000
       "
+    networks:
+      - audit_network
 
 # -------------=== pbft engines ===-------------
 
@@ -107,6 +118,8 @@ services:
     image: hyperledger/sawtooth-pbft-engine:chime
     container_name: sawtooth-pbft-engine-0
     command: pbft-engine -vv --connect tcp://validator-0:5050
+    networks:
+      - audit_network
     stop_signal: SIGKILL
 
 # --------=== audit transaction processor ===--------
@@ -114,14 +127,17 @@ services:
   audit-tp-0:
     image: audit-tp:latest
     container_name: audit-tp-0
-    env_file: .env
     environment:
       - NODE=0
+      - TP_FAMILY=AuditSystem
+      - TP_VERSION=1.0
     depends_on:
       - validator-0
     build:
       context: ./tp
       dockerfile: ../Dockerfile
+    networks:
+      - audit_network
 
 # --------=== blockchain client ===--------
 
@@ -129,17 +145,21 @@ services:
     image: client
     container_name: client-0
     expose:
-      - ${CLIENT_PORT}
+      - 4000
     ports:
-      - "${CLIENT_PORT}:${CLIENT_PORT}"
-    env_file: .env
+      - "4000:4000"
     environment:
       - NODE=0
+      - CLIENT_PORT=4000
+      - TP_FAMILY=AuditSystem
+      - TP_VERSION=1.0
     depends_on:
       - rest-api-0
     build:
       context: ./client
       dockerfile: ../Dockerfile
+    networks:
+      - audit_network
 
 # --------=== blockchain frontend ===--------
   
@@ -153,6 +173,8 @@ services:
     depends_on:
       - rest-api-0
       - mongo-db
+    networks:
+      - audit_network
 
 # --------=== HL Explorer rest-api ===--------
 
@@ -171,6 +193,8 @@ services:
       - PORT=3000
       - VALIDATOR_URL=tcp://validator-0:4004
       - REST_API_URL=http://rest-api-0:8008
+    networks:
+      - audit_network
 
 # --------=== HL Explorer datadase ===--------
 
@@ -182,4 +206,6 @@ services:
     volumes:
       - mongo_data:/data/db
     depends_on:
-      - rest-api
+      - rest-api-0
+    networks:
+      - audit_network

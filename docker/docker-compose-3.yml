@@ -3,6 +3,9 @@ version: '3.6'
 volumes:
   pbft-shared:
 
+networks:
+  audit_network:
+
 services:
 
 # -------------=== rest api ===-------------
@@ -18,6 +21,8 @@ services:
           --connect tcp://validator-3:4004 \
           --bind rest-api-3:8008
       "
+    networks:
+      - audit_network
     stop_signal: SIGKILL
 
 # -------------=== settings tp ===-------------
@@ -28,6 +33,8 @@ services:
     expose:
       - 4004
     command: settings-tp -C tcp://validator-3:4004
+    networks:
+      - audit_network
     stop_signal: SIGKILL
 
 # -------------=== validators ===-------------
@@ -66,6 +73,8 @@ services:
           --peers tcp://validator-1:8800 \
           --peers tcp://validator-2:8800
       "
+    networks:
+      - audit_network
 
 # -------------=== pbft engines ===-------------
 
@@ -73,6 +82,8 @@ services:
     image: hyperledger/sawtooth-pbft-engine:chime
     container_name: sawtooth-pbft-engine-default-3
     command: pbft-engine -vv --connect tcp://validator-3:5050
+    networks:
+      - audit_network
     stop_signal: SIGKILL
 
 # --------=== audit transaction processor ===--------
@@ -80,14 +91,17 @@ services:
   audit-tp-3:
     image: audit-tp:latest
     container_name: audit-tp-3
-    env_file: .env
     environment:
       - NODE=3
+      - TP_FAMILY=AuditSystem
+      - TP_VERSION=1.0
     depends_on:
       - validator-3
     build:
       context: ./tp
       dockerfile: ../Dockerfile
+    networks:
+      - audit_network
 
 # --------=== blockchain client ===--------
 
@@ -95,14 +109,18 @@ services:
     image: client
     container_name: client-3
     expose:
-      - ${CLIENT_PORT}
+      - 4000
     ports:
-      - "${CLIENT_PORT}:${CLIENT_PORT}"
-    env_file: .env
+      - "4000:4000"
     environment:
       - NODE=3
+      - CLIENT_PORT=4000
+      - TP_FAMILY=AuditSystem
+      - TP_VERSION=1.0
     depends_on:
       - rest-api-3
     build:
       context: ./client
       dockerfile: ../Dockerfile
+    networks:
+      - audit_network

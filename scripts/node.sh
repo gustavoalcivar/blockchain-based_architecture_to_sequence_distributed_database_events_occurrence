@@ -17,7 +17,8 @@ if [ $1 == 0 ]; then
     sudo docker network create --attachable --driver overlay audit_network
 else
     echo Swarm Join...
-    sudo docker swarm join --token $(cat /vagrant/token) $20:2377 --advertise-addr $2$1
+    sudo docker swarm join --token $(cat /vagrant/token) $20:2377 --advertise-addr $2$1:2377
 fi
 echo Docker Pull...
-sudo docker-compose -f /vagrant/docker/docker-compose-$1.yaml pull -q
+sudo docker-compose -f /vagrant/docker/docker-compose-$1.yml pull -q
+sudo docker-compose -f /vagrant/docker/docker-compose-$1.yml build -q

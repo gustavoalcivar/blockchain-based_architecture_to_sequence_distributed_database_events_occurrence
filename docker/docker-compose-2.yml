@@ -3,38 +3,45 @@ version: '3.6'
 volumes:
   pbft-shared:
 
+networks:
+  audit_network:
+
 services:
 
 # -------------=== rest api ===-------------
 
-  rest-api-1:
+  rest-api-2:
     image: hyperledger/sawtooth-rest-api:chime
-    container_name: sawtooth-rest-api-default-1
+    container_name: sawtooth-rest-api-default-2
     expose:
       - 8008
     command: |
       bash -c "
         sawtooth-rest-api \
-          --connect tcp://validator-1:4004 \
-          --bind rest-api-1:8008
+          --connect tcp://validator-2:4004 \
+          --bind rest-api-2:8008
       "
+    networks:
+      - audit_network
     stop_signal: SIGKILL
 
 # -------------=== settings tp ===-------------
 
-  settings-tp-1:
+  settings-tp-2:
     image: hyperledger/sawtooth-settings-tp:chime
-    container_name: sawtooth-settings-tp-default-1
+    container_name: sawtooth-settings-tp-default-2
     expose:
       - 4004
-    command: settings-tp -C tcp://validator-1:4004
+    command: settings-tp -C tcp://validator-2:4004
+    networks:
+      - audit_network
     stop_signal: SIGKILL
 
 # -------------=== validators ===-------------
 
-  validator-1:
+  validator-2:
     image: hyperledger/sawtooth-validator:chime
-    container_name: sawtooth-validator-default-1
+    container_name: sawtooth-validator-default-2
     expose:
       - 4004
       - 5050
@@ -43,64 +50,76 @@ services:
       - ./pbft-shared:/pbft-shared
     command: |
       bash -c "
-        if [ -e /pbft-shared/validators/validator-1.priv ]; then
-          cp /pbft-shared/validators/validator-1.pub /etc/sawtooth/keys/validator.pub
-          cp /pbft-shared/validators/validator-1.priv /etc/sawtooth/keys/validator.priv
+        if [ -e /pbft-shared/validators/validator-2.priv ]; then
+          cp /pbft-shared/validators/validator-2.pub /etc/sawtooth/keys/validator.pub
+          cp /pbft-shared/validators/validator-2.priv /etc/sawtooth/keys/validator.priv
         fi &&
         if [ ! -e /etc/sawtooth/keys/validator.priv ]; then
           sawadm keygen
           mkdir -p /pbft-shared/validators || true
-          cp /etc/sawtooth/keys/validator.pub /pbft-shared/validators/validator-1.pub
-          cp /etc/sawtooth/keys/validator.priv /pbft-shared/validators/validator-1.priv
+          cp /etc/sawtooth/keys/validator.pub /pbft-shared/validators/validator-2.pub
+          cp /etc/sawtooth/keys/validator.priv /pbft-shared/validators/validator-2.priv
         fi &&
         sawtooth keygen my_key &&
         sawtooth-validator -vv \
-          --endpoint tcp://validator-1:8800 \
+          --endpoint tcp://validator-2:8800 \
           --bind component:tcp://eth0:4004 \
           --bind consensus:tcp://eth0:5050 \
           --bind network:tcp://eth0:8800 \
           --scheduler parallel \
           --peering static \
           --maximum-peer-connectivity 10000 \
-          --peers tcp://validator-0:8800
+          --peers tcp://validator-0:8800 \
+          --peers tcp://validator-1:8800
       "
+    networks:
+      - audit_network
 
 # -------------=== pbft engines ===-------------
 
-  pbft-1:
+  pbft-2:
     image: hyperledger/sawtooth-pbft-engine:chime
-    container_name: sawtooth-pbft-engine-default-1
-    command: pbft-engine -vv --connect tcp://validator-1:5050
+    container_name: sawtooth-pbft-engine-default-2
+    command: pbft-engine -vv --connect tcp://validator-2:5050
+    networks:
+      - audit_network
     stop_signal: SIGKILL
 
 # --------=== audit transaction processor ===--------
 
-  audit-tp-1:
+  audit-tp-2:
     image: audit-tp:latest
-    container_name: audit-tp-1
-    env_file: .env
+    container_name: audit-tp-2
     environment:
-      - NODE=1
+      - NODE=2
+      - TP_FAMILY=AuditSystem
+      - TP_VERSION=1.0
     depends_on:
-      - validator-1
+      - validator-2
     build:
       context: ./tp
       dockerfile: ../Dockerfile
+    networks:
+      - audit_network
 
 # --------=== blockchain client ===--------
 
-  client-1:
+  client-2:
     image: client
-    container_name: client-1
+    container_name: client-2
     expose:
-      - ${CLIENT_PORT}
+      - 4000
     ports:
-      - "${CLIENT_PORT}:${CLIENT_PORT}"
-    env_file: .env
+      - "4000:4000"
     environment:
-      - NODE=1
+      - NODE=2
+      - CLIENT_PORT=4000
+      - TP_FAMILY=AuditSystem
+      - TP_VERSION=1.0
     depends_on:
-      - rest-api-1
+      - rest-api-2
     build:
       context: ./client
       dockerfile: ../Dockerfile
+    networks:
+      - audit_network
