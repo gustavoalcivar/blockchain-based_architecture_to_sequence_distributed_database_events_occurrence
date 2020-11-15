@@ -2,5 +2,5 @@ import Vue from 'vue'
 import VueSocketio from 'vue-socket.io';
 Vue.use(new VueSocketio({
     debug: true,
-    connection: 'http://localhost:3000'
+    connection: process.env.VUE_APP_API_URL || 'http://localhost:3000'
 }))

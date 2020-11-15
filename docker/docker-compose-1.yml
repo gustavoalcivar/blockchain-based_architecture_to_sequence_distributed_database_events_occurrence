@@ -4,7 +4,9 @@ volumes:
   pbft-shared:
 
 networks:
-  audit_network:
+  _network:
+    external:
+      name: audit_network
 
 services:
 
@@ -12,7 +14,7 @@ services:
 
   rest-api-1:
     image: hyperledger/sawtooth-rest-api:chime
-    container_name: sawtooth-rest-api-default-1
+    container_name: sawtooth-rest-api-1
     expose:
       - 8008
     command: |
@@ -22,26 +24,26 @@ services:
           --bind rest-api-1:8008
       "
     networks:
-      - audit_network
+      - _network
     stop_signal: SIGKILL
 
 # -------------=== settings tp ===-------------
 
   settings-tp-1:
     image: hyperledger/sawtooth-settings-tp:chime
-    container_name: sawtooth-settings-tp-default-1
+    container_name: sawtooth-settings-tp-1
     expose:
       - 4004
     command: settings-tp -C tcp://validator-1:4004
     networks:
-      - audit_network
+      - _network
     stop_signal: SIGKILL
 
 # -------------=== validators ===-------------
 
   validator-1:
     image: hyperledger/sawtooth-validator:chime
-    container_name: sawtooth-validator-default-1
+    container_name: sawtooth-validator-1
     expose:
       - 4004
       - 5050
@@ -72,16 +74,16 @@ services:
           --peers tcp://validator-0:8800
       "
     networks:
-      - audit_network
+      - _network
 
 # -------------=== pbft engines ===-------------
 
   pbft-1:
     image: hyperledger/sawtooth-pbft-engine:chime
-    container_name: sawtooth-pbft-engine-default-1
+    container_name: sawtooth-pbft-engine-1
     command: pbft-engine -vv --connect tcp://validator-1:5050
     networks:
-      - audit_network
+      - _network
     stop_signal: SIGKILL
 
 # --------=== audit transaction processor ===--------
@@ -99,7 +101,7 @@ services:
       context: ./tp
       dockerfile: ../Dockerfile
     networks:
-      - audit_network
+      - _network
 
 # --------=== blockchain client ===--------
 
@@ -121,4 +123,4 @@ services:
       context: ./client
       dockerfile: ../Dockerfile
     networks:
-      - audit_network
+      - _network

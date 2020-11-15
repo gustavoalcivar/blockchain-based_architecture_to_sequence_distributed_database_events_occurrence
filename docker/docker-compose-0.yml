@@ -5,7 +5,9 @@ volumes:
   mongo_data:
 
 networks:
-  audit_network:
+  _network:
+    external:
+      name: audit_network
 
 services:
 
@@ -23,7 +25,7 @@ services:
           --bind rest-api-0:8008
       "
     networks:
-      - audit_network
+      - _network
     stop_signal: SIGKILL
 
 # -------------=== settings tp ===-------------
@@ -35,7 +37,7 @@ services:
       - 4004
     command: settings-tp -C tcp://validator-0:4004
     networks:
-      - audit_network
+      - _network
     stop_signal: SIGKILL
 
 # -------------=== shell ===-------------
@@ -51,7 +53,7 @@ services:
         tail -f /dev/null
       "
     networks:
-      - audit_network
+      - _network
     stop_signal: SIGKILL
 
 # -------------=== validators ===-------------
@@ -110,7 +112,7 @@ services:
           --maximum-peer-connectivity 10000
       "
     networks:
-      - audit_network
+      - _network
 
 # -------------=== pbft engines ===-------------
 
@@ -119,7 +121,7 @@ services:
     container_name: sawtooth-pbft-engine-0
     command: pbft-engine -vv --connect tcp://validator-0:5050
     networks:
-      - audit_network
+      - _network
     stop_signal: SIGKILL
 
 # --------=== audit transaction processor ===--------
@@ -137,7 +139,7 @@ services:
       context: ./tp
       dockerfile: ../Dockerfile
     networks:
-      - audit_network
+      - _network
 
 # --------=== blockchain client ===--------
 
@@ -159,7 +161,7 @@ services:
       context: ./client
       dockerfile: ../Dockerfile
     networks:
-      - audit_network
+      - _network
 
 # --------=== blockchain frontend ===--------
   
@@ -169,12 +171,13 @@ services:
     ports:
       - 8080:8080
     environment:
-      - API_URL=http://localhost:3000/
+      - API_URL=http://192.168.100.200:3000/
+      - VUE_APP_API_URL=http://192.168.100.200:3000/
     depends_on:
       - rest-api-0
       - mongo-db
     networks:
-      - audit_network
+      - _network
 
 # --------=== HL Explorer rest-api ===--------
 
@@ -194,7 +197,7 @@ services:
       - VALIDATOR_URL=tcp://validator-0:4004
       - REST_API_URL=http://rest-api-0:8008
     networks:
-      - audit_network
+      - _network
 
 # --------=== HL Explorer datadase ===--------
 
@@ -208,4 +211,4 @@ services:
     depends_on:
       - rest-api-0
     networks:
-      - audit_network
+      - _network
