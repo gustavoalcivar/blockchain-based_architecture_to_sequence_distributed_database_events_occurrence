@@ -171,7 +171,6 @@ services:
     ports:
       - 8080:8080
     environment:
-      - API_URL=http://192.168.100.200:3000/
       - VUE_APP_API_URL=http://192.168.100.200:3000/
     depends_on:
       - rest-api-0

@@ -6,7 +6,7 @@ import { AUTH_NAMESPACE, LOGOUT, SNACKBAR } from '@/store/constants';
 import { EventBus } from '@/lib/event-bus';
 
 const axiosInstance = axios.create({
-  baseURL: process.env.VUE_APP_API_URL || 'http://localhost:3000',
+  baseURL: process.env.VUE_APP_API_URL || 'http://192.168.100.200:3000',
 });
 
 axiosInstance.interceptors.response.use(
