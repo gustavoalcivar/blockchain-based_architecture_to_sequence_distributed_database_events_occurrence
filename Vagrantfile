@@ -6,7 +6,7 @@ config.vm.box = 'ubuntu/focal64'
 config.vm.box_check_update = true
 config.vm.synced_folder ".", "/vagrant"
 config.vm.provider "virtualbox" do |vb|
-    vb.memory = 1024
+    vb.memory = 1536
     vb.cpus = 2
 end
 (0..3).each do |i|
