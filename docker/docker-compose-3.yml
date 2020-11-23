@@ -17,8 +17,11 @@ services:
     container_name: sawtooth-rest-api-3
     expose:
       - 8008
+    volumes:
+      - ./pbft-shared:/pbft-shared
     command: |
       bash -c "
+        cp /pbft-shared/config/rest_api.toml /etc/sawtooth/rest_api.toml
         sawtooth-rest-api \
           --connect tcp://validator-3:4004 \
           --bind rest-api-3:8008
@@ -52,6 +55,7 @@ services:
       - ./pbft-shared:/pbft-shared
     command: |
       bash -c "
+        cp /pbft-shared/config/validator.toml /etc/sawtooth/validator.toml
         if [ -e /pbft-shared/validators/validator-3.priv ]; then
          cp /pbft-shared/validators/validator-3.pub /etc/sawtooth/keys/validator.pub
          cp /pbft-shared/validators/validator-3.priv /etc/sawtooth/keys/validator.priv

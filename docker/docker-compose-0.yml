@@ -18,8 +18,11 @@ services:
     container_name: sawtooth-rest-api-0
     expose:
       - 8008
+    volumes:
+      - ./pbft-shared:/pbft-shared
     command: |
       bash -c "
+        cp /pbft-shared/config/rest_api.toml /etc/sawtooth/rest_api.toml
         sawtooth-rest-api \
           --connect tcp://validator-0:4004 \
           --bind rest-api-0:8008
@@ -49,8 +52,10 @@ services:
       - ./pbft-shared:/pbft-shared
     command: |
       bash -c "
-        sawtooth keygen
-        tail -f /dev/null
+        if [ ! -e $HOME/.sawtooth/keys/my_key.priv ]; then
+          sawtooth keygen
+          tail -f /dev/null
+        fi
       "
     networks:
       - _network
@@ -69,6 +74,7 @@ services:
       - ./pbft-shared:/pbft-shared
     command: |
       bash -c "
+        cp /pbft-shared/config/validator.toml /etc/sawtooth/validator.toml
         if [ -e /pbft-shared/validators/validator-0.priv ]; then
           cp /pbft-shared/validators/validator-0.pub /etc/sawtooth/keys/validator.pub
           cp /pbft-shared/validators/validator-0.priv /etc/sawtooth/keys/validator.priv
@@ -99,7 +105,7 @@ services:
         if [ ! -e /var/lib/sawtooth/genesis.batch ]; then
           sawadm genesis config-genesis.batch config.batch
         fi &&
-        if [ ! -e /root/.sawtooth/keys/my_key.priv ]; then
+        if [ ! -e $HOME/.sawtooth/keys/my_key.priv ]; then
           sawtooth keygen my_key
         fi &&
         sawtooth-validator -vv \
@@ -166,12 +172,13 @@ services:
 # --------=== blockchain frontend ===--------
   
   vue-js:
+    container_name: hl-explorer-frontend
     build:
       context: ./web
     ports:
       - 8080:8080
     environment:
-      - VUE_APP_API_URL=http://192.168.100.200:3000/
+      - VUE_APP_API_URL=http://192.168.100.200:3001/
     depends_on:
       - rest-api-0
       - mongo-db
@@ -181,18 +188,19 @@ services:
 # --------=== HL Explorer rest-api ===--------
 
   express-js:
+    container_name: hl-explorer-backend
     image: express-js
     build:
       context: ./api
     ports:
-      - 3000:3000
+      - 3001:3001
     depends_on: 
       - mongo-db
     environment:
       - DATABASE_URL=mongo-db
       - WAIT_HOSTS=mongo-db:27017
       - NODE_ENV=development
-      - PORT=3000
+      - PORT=3001
       - VALIDATOR_URL=tcp://validator-0:4004
       - REST_API_URL=http://rest-api-0:8008
     networks:
@@ -202,12 +210,59 @@ services:
 
   mongo-db:
     container_name: mongo-db
-    image: mongo
+    image: mongo:4.4-bionic
     ports:
       - 27017:27017
     volumes:
       - mongo_data:/data/db
     depends_on:
       - rest-api-0
+    networks:
+      - _network
+
+# --------=== Grafana ===--------
+
+  sawtooth-stats-grafana:
+    container_name: sawtooth-stats-grafana
+    build:
+      context: ./grafana
+    expose:
+      - 3000
+    ports:
+      - 3000:3000
+    networks:
+      - _network
+    depends_on:
+      - influxdb
+
+# --------=== Influxdb ===--------
+
+  influxdb:
+    image: influxdb:1.8-alpine
+    container_name: sawtooth-stats-influxdb
+    environment:
+      - INFLUXDB_DB=metrics
+      - INFLUXDB_HTTP_AUTH_ENABLED=true
+      - INFLUXDB_ADMIN_USER=admin
+      - INFLUXDB_ADMIN_PASSWORD=admin
+      - INFLUXDB_USER=lrdata
+      - INFLUXDB_USER_PASSWORD=lrdata
+    expose:
+      - 8086
+    ports:
+      - "8086:8086"
+    networks:
+      - _network
+
+# -------------=== Telegraf ===-------------
+
+  telegraf:
+    container_name: telegraf
+    build:
+      context: ./telegraf
+    ports:
+      - 8125:8125
+      - 8092:8092
+      - 8094:8094
     networks:
       - _network
