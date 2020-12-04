@@ -2,6 +2,8 @@ version: '3.6'
 
 volumes:
   pbft-shared:
+  blockchain_data:
+  sawtooth_logs:
 
 networks:
   _network:
@@ -53,6 +55,8 @@ services:
       - 8800
     volumes:
       - ./pbft-shared:/pbft-shared
+      - blockchain_data:/var/lib/sawtooth
+      - ./sawtooth_logs/node1:/var/log/sawtooth
     command: |
       bash -c "
         cp /pbft-shared/config/validator.toml /etc/sawtooth/validator.toml
@@ -66,7 +70,17 @@ services:
           cp /etc/sawtooth/keys/validator.pub /pbft-shared/validators/validator-1.pub
           cp /etc/sawtooth/keys/validator.priv /pbft-shared/validators/validator-1.priv
         fi &&
-        sawtooth keygen my_key &&
+        if [ -e /pbft-shared/user_keys/my_key-1.priv ]; then
+          mkdir -p $HOME/.sawtooth/keys || true
+          cp /pbft-shared/user_keys/my_key-1.pub $HOME/.sawtooth/keys/my_key.pub
+          cp /pbft-shared/user_keys/my_key-1.priv $HOME/.sawtooth/keys/my_key.priv
+        fi &&
+        if [ ! -e $HOME/.sawtooth/keys/my_key.priv ]; then
+          sawtooth keygen my_key
+          mkdir -p /pbft-shared/user_keys || true
+          cp $HOME/.sawtooth/keys/my_key.pub /pbft-shared/user_keys/my_key-1.pub
+          cp $HOME/.sawtooth/keys/my_key.priv /pbft-shared/user_keys/my_key-1.priv
+        fi &&
         sawtooth-validator -vv \
           --endpoint tcp://validator-1:8800 \
           --bind component:tcp://eth0:4004 \

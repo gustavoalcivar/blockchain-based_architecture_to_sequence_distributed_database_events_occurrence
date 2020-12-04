@@ -1,6 +1,21 @@
 #!/usr/bin/env bash
+docker stop $(docker ps -a -q)
+docker rm -f $(docker ps -a -q)
+if [ $(cat /vagrant/restart) == 1 ]; then
+    echo ***********************************
+    echo ***********************************
+    echo **                               **
+    echo **                               **
+    echo **    Restarting Blockhain...    **
+    echo **                               **
+    echo **                               **
+    echo ***********************************
+    echo ***********************************
+    docker volume rm -f $(docker volume ls -q)
+fi
+docker swarm leave -f
+docker network prune -f
 if [ $1 == 0 ]; then
-    docker network prune --force
     echo Swarm Init...
     docker swarm init --listen-addr $20:2377 --advertise-addr $20:2377
     docker swarm join-token --quiet manager > /vagrant/token

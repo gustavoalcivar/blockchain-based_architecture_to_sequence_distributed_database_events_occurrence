@@ -1,5 +1,4 @@
 token
 .vagrant/
-docker/pbft-shared/validators/
 interface/node_modules/
 interface/*.sql

@@ -2,6 +2,8 @@ version: '3.6'
 
 volumes:
   pbft-shared:
+  blockchain_data:
+  sawtooth_logs:
   mongo_data:
 
 networks:
@@ -48,6 +50,8 @@ services:
   shell:
     image: hyperledger/sawtooth-shell:chime
     container_name: sawtooth-shell
+    depends_on:
+      - validator-0
     volumes:
       - ./pbft-shared:/pbft-shared
     command: |
@@ -72,6 +76,8 @@ services:
       - 8800
     volumes:
       - ./pbft-shared:/pbft-shared
+      - blockchain_data:/var/lib/sawtooth
+      - ./sawtooth_logs/node0:/var/log/sawtooth
     command: |
       bash -c "
         cp /pbft-shared/config/validator.toml /etc/sawtooth/validator.toml
@@ -105,8 +111,16 @@ services:
         if [ ! -e /var/lib/sawtooth/genesis.batch ]; then
           sawadm genesis config-genesis.batch config.batch
         fi &&
+        if [ -e /pbft-shared/user_keys/my_key-0.priv ]; then
+          mkdir -p $HOME/.sawtooth/keys || true
+          cp /pbft-shared/user_keys/my_key-0.pub $HOME/.sawtooth/keys/my_key.pub
+          cp /pbft-shared/user_keys/my_key-0.priv $HOME/.sawtooth/keys/my_key.priv
+        fi &&
         if [ ! -e $HOME/.sawtooth/keys/my_key.priv ]; then
           sawtooth keygen my_key
+          mkdir -p /pbft-shared/user_keys || true
+          cp $HOME/.sawtooth/keys/my_key.pub /pbft-shared/user_keys/my_key-0.pub
+          cp $HOME/.sawtooth/keys/my_key.priv /pbft-shared/user_keys/my_key-0.priv
         fi &&
         sawtooth-validator -vv \
           --endpoint tcp://validator-0:8800 \
