@@ -4,11 +4,11 @@ docker rm -f $(docker ps -a -q)
 if [ $(cat /vagrant/restart) == 1 ]; then
     echo ***********************************
     echo ***********************************
-    echo **                               **
-    echo **                               **
-    echo **    Restarting Blockhain...    **
-    echo **                               **
-    echo **                               **
+    echo **-------------------------------**
+    echo **-------------------------------**
+    echo **----Restarting Blockhain...----**
+    echo **-------------------------------**
+    echo **-------------------------------**
     echo ***********************************
     echo ***********************************
     docker volume rm -f $(docker volume ls -q)

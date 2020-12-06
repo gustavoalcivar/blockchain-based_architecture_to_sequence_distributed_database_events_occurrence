@@ -73,7 +73,7 @@ parametrization.forEach((table) => {
 			set @transaction = 'DELETE'
 			select @data = concat('${strInsertDelete}') from deleted;
 		end
-		set @cmd = '${indexPath} {\\"metadata\\":{\\"database\\":\\"${database}\\",\\"table\\":\\"${table.table}\\",\\"transaction\\":\\"' + @transaction + '\\",\\"user\\":\\"' + REPLACE(SYSTEM_USER,'\\','_') + '\\"},\\"data\\":{' + @data + '}}'
+		set @cmd = '${indexPath} {\\"type\\":\\"save\\",\\"metadata\\":{\\"database\\":\\"${database}\\",\\"table\\":\\"${table.table}\\",\\"transaction\\":\\"' + @transaction + '\\",\\"user\\":\\"' + REPLACE(SYSTEM_USER,'\\','_') + '\\"},\\"data\\":{' + @data + '}}'
 		EXEC Master..xp_cmdshell @cmd
 	 END
 	 GO
