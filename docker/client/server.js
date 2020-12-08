@@ -1,7 +1,7 @@
 const { createContext, CryptoFactory } = require("sawtooth-sdk/signing");
 const { encode } = require("cbor");
 const { protobuf } = require("sawtooth-sdk");
-const { post } = require("axios");
+const { post, get } = require("axios");
 const { createHash } = require("crypto");
 
 const context = createContext("secp256k1");
@@ -12,7 +12,7 @@ const _hash = (x) =>
   createHash("sha512").update(x).digest("hex").toLowerCase().substring(0, 64);
 
 const sendRequest = async (payload) => {
-  const payloadBytes = encode(payload);
+  const payloadBytes = encode(JSON.stringify(payload));
   const transactionHeaderBytes = protobuf.TransactionHeader.encode({
     familyName: process.env.TP_FAMILY,
     familyVersion: process.env.TP_VERSION,
@@ -65,4 +65,14 @@ const saveAudit = async (data) => {
   }
 };
 
-module.exports = saveAudit;
+const viewBlocks = async() => {
+  try {
+    let blocks = await get(`http://rest-api-${process.env.NODE}:8008/blocks`);
+    console.log("Blocks", blocks);
+    return blocks;
+  } catch (err) {
+    return { err };
+  }
+}
+
+module.exports = {saveAudit, viewBlocks};

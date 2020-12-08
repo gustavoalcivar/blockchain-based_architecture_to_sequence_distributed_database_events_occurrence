@@ -3,7 +3,6 @@ version: '3.6'
 volumes:
   pbft-shared:
   blockchain_data:
-  sawtooth_logs:
 
 networks:
   _network:
@@ -56,7 +55,6 @@ services:
     volumes:
       - ./pbft-shared:/pbft-shared
       - blockchain_data:/var/lib/sawtooth
-      - ./sawtooth_logs/node2:/var/log/sawtooth
     command: |
       bash -c "
         cp /pbft-shared/config/validator.toml /etc/sawtooth/validator.toml

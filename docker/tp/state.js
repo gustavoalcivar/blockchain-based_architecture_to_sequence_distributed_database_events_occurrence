@@ -13,24 +13,13 @@ class AuditState {
   saveAudit(value) {
     const address = makeAddress(value);
     let stateEntriesSend = {};
-    stateEntriesSend[address] = Buffer.from(`Data: ${value}`);
+    stateEntriesSend[address] = Buffer.from(`${value}`);
     return this.context
       .setState(stateEntriesSend, this.timeout)
       .then((result) => console.log("Success", result))
       .catch((error) => console.error("Error", error));
   }
 
-  viewAudit(value) {
-    let address = makeAddress(value);
-    return this.context
-      .getState([address], this.timeout)
-      .then((stateEntries) => {
-        Object.assign(this.stateEntries, stateEntries);
-        console.log(this.stateEntries[address].toString());
-        return this.stateEntries;
-      })
-      .bind(this);
-  }
 }
 
 const makeAddress = (x) =>

@@ -14,5 +14,7 @@ sudo curl -s -L "https://github.com/docker/compose/releases/download/1.27.4/dock
 sudo chmod +x /usr/local/bin/docker-compose
 echo Docker Pull...
 docker-compose -f /vagrant/docker/docker-compose-$1.yml pull -q
+echo Docker Pull completed
 echo Docker Build...
 docker-compose -f /vagrant/docker/docker-compose-$1.yml build -q
+echo Docker Build completed

@@ -21,10 +21,7 @@ class AuditHandler extends TransactionHandler {
     //console.log("payload", JSON.parse(payload));
     let auditState = new AuditState(context);
     try {
-      if(payload.type === 'save')
-        return auditState.saveAudit(payload.data);
-      else
-        return auditState.viewAudit(payload.data);
+      return auditState.saveAudit(payload);
     } catch (error) {
       console.log("ERROR", error);
       throw new InternalError();
