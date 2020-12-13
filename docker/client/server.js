@@ -67,9 +67,7 @@ const saveAudit = async (data) => {
 
 const viewBlocks = async() => {
   try {
-    let blocks = await get(`http://rest-api-${process.env.NODE}:8008/blocks`);
-    console.log("Blocks", blocks);
-    return blocks;
+    return await get(`http://rest-api-${process.env.NODE}:8008/blocks`);
   } catch (err) {
     return { err };
   }

@@ -181,57 +181,6 @@ services:
     networks:
       - _network
 
-# --------=== blockchain frontend ===--------
-  
-  vue-js:
-    container_name: hl-explorer-frontend
-    build:
-      context: ./web
-    ports:
-      - 8080:8080
-    environment:
-      - VUE_APP_API_URL=http://192.168.100.200:3001/
-    depends_on:
-      - rest-api-0
-      - mongo-db
-    networks:
-      - _network
-
-# --------=== HL Explorer rest-api ===--------
-
-  express-js:
-    container_name: hl-explorer-backend
-    image: express-js
-    build:
-      context: ./api
-    ports:
-      - 3001:3001
-    depends_on: 
-      - mongo-db
-    environment:
-      - DATABASE_URL=mongo-db
-      - WAIT_HOSTS=mongo-db:27017
-      - NODE_ENV=development
-      - PORT=3001
-      - VALIDATOR_URL=tcp://validator-0:4004
-      - REST_API_URL=http://rest-api-0:8008
-    networks:
-      - _network
-
-# --------=== HL Explorer datadase ===--------
-
-  mongo-db:
-    container_name: mongo-db
-    image: mongo:4.4-bionic
-    ports:
-      - 27017:27017
-    volumes:
-      - mongo_data:/data/db
-    depends_on:
-      - rest-api-0
-    networks:
-      - _network
-
 # --------=== Grafana ===--------
 
   sawtooth-stats-grafana:
