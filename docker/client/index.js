@@ -34,7 +34,7 @@ app.get("/blocks/", async (req, res) => {
           nonce: trx0.header.nonce
         };
         if(block.block_num !== "0")
-          trx.payload = Buffer.from(trx0.payload, "base64").toString("utf-8").substring(Buffer.from(trx0.payload, "base64").toString("utf-8").indexOf("{"), Buffer.from(trx0.payload, "base64").toString("utf-8").length - 1);
+          trx.payload = JSON.parse(Buffer.from(trx0.payload, "base64").toString("utf-8").substring(Buffer.from(trx0.payload, "base64").toString("utf-8").indexOf("{"), Buffer.from(trx0.payload, "base64").toString("utf-8").length));
         batch.transactions.push(trx);
       });
       block.batches.push(batch);
