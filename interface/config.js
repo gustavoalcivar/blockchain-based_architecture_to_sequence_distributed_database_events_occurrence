@@ -13,19 +13,19 @@ const configWhereClause = "1 = 1"; // Example: param = 'active_blockchain' AND v
 const parametrization = [
   {
     table: "transacciones",
-    columns: ["id", "monto", "id_cuenta_bancaria", "id_tipo_transaccion"],
+    columns: ["id|int|", "monto|float", "id_cuenta_bancaria|int", "id_tipo_transaccion|int"],
   },
   {
     table: "tipo_transaccion",
-    columns: ["id", "descripcion"],
+    columns: ["id|int|", "descripcion|varchar(255)"],
   },
   {
     table: "cuentas_bancarias",
-    columns: ["id", "moneda", "id_cliente", "saldo"],
+    columns: ["id|int|", "moneda|varchar(10)", "id_cliente|int", "saldo|float"],
   },
   {
     table: "clientes",
-    columns: ["id", "nombre", "apellido", "telefono", "correo"],
+    columns: ["id|int|", "nombre|varchar(50)", "apellido|varchar(50)", "telefono|varchar(20)", "correo|varchar(50)"],
   },
 ];
 

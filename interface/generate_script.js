@@ -27,17 +27,111 @@ RECONFIGURE
 GO
 `;
 parametrization.forEach((table) => {
+  data =
+    data +
+    `
+    IF not exists(SELECT 1 FROM INFORMATION_SCHEMA.columns WHERE table_name='${table.table}' AND column_name='application_time')
+    BEGIN
+      ALTER TABLE ${table.table} ADD application_time varchar(23)
+    END
+  IF not exists(SELECT 1 FROM INFORMATION_SCHEMA.columns WHERE table_name='${table.table}' AND column_name='application_user')
+    BEGIN
+      ALTER TABLE ${table.table} ADD application_user varchar(255)
+    END
+    `;
+
+  let spParams = "";
+  let spColumns = "";
+  let spValues = "";
+  let spUpdate = "";
+  let idColumn = "";
+  let idType = "";
+  table.columns.forEach((item) => {
+    if(item.split("|").length == 2) {
+      spParams = spParams + `@${item.split("|")[0]} ${item.split("|")[1]},`;
+      spColumns = spColumns + `${item.split("|")[0]},`;
+      spValues = spValues + `@${item.split("|")[0]},`;
+      spUpdate = spUpdate + `${item.split("|")[0]}=@${item.split("|")[0]},`;
+    } else if(item.split("|").length == 3) {
+      idColumn = `${item.split("|")[0]}`;
+      idType = item.split("|")[1];
+    }
+  });
+
+  data =
+    data +
+    `
+    IF OBJECT_ID ('insert_${table.table}_store_procedure', 'P') IS NOT NULL
+    BEGIN
+    DROP PROCEDURE ${schema}.insert_${table.table}_store_procedure
+    END
+    GO
+    CREATE PROCEDURE ${schema}.insert_${table.table}_store_procedure(
+    ${spParams}
+    @application_time varchar(23),
+    @application_user varchar(255)
+    )
+    AS
+     BEGIN
+      insert into ${table.table}(${spColumns}application_time,application_user) values(${spValues}@application_time,@application_user)
+     END
+     GO
+    
+     IF OBJECT_ID ('update_${table.table}_store_procedure', 'P') IS NOT NULL
+     BEGIN
+     DROP PROCEDURE ${schema}.update_${table.table}_store_procedure
+     END
+     GO
+     CREATE PROCEDURE ${schema}.update_${table.table}_store_procedure(
+      @${idColumn} ${idType},
+      ${spParams}
+      @application_time varchar(23),
+      @application_user varchar(255)
+     )
+     AS
+      BEGIN
+       update ${table.table} set ${spUpdate.substring(0, spUpdate.length)}application_time=@application_time,application_user=@application_user where ${idColumn}=@${idColumn}
+      END
+      GO
+
+      IF OBJECT_ID ('delete_${table.table}_store_procedure', 'P') IS NOT NULL
+      BEGIN
+      DROP PROCEDURE ${schema}.delete_${table.table}_store_procedure
+      END
+      GO
+      CREATE PROCEDURE ${schema}.delete_${table.table}_store_procedure(
+       @${idColumn} ${idType},
+       @application_time varchar(23),
+       @application_user varchar(255)
+      )
+      AS
+       BEGIN
+        delete ${table.table} where ${idColumn}=@${idColumn}
+       END
+       GO
+  `;
+  
   let strInsertDelete = "";
   let strUpdate = "";
   table.columns.forEach((item) => {
-    strInsertDelete = strInsertDelete + `\\"${item}\\":\\"',${item},'\\",`;
+    strInsertDelete = strInsertDelete + `\\"${item.split("|")[0]}\\":\\"',${item.split("|")[0]},'\\",`;
     strUpdate =
       strUpdate +
-      `\\"${item}_old\\":\\"',deleted.${item},'\\",` +
-      `\\"${item}_new\\":\\"',inserted.${item},'\\",`;
+      `\\"${item.split("|")[0]}_old\\":\\"',deleted.${item.split("|")[0]},'\\",` +
+      `\\"${item.split("|")[0]}_new\\":\\"',inserted.${item.split("|")[0]},'\\",`;
   });
-  strInsertDelete = strInsertDelete.substring(0, strInsertDelete.length - 1);
-  strUpdate = strUpdate.substring(0, strUpdate.length - 1);
+  strInsertDelete = strInsertDelete + `\\"application_time\\":\\"',application_time,'\\",`;
+  strInsertDelete = strInsertDelete + `\\"application_user\\":\\"',application_user,'\\"`;
+  strUpdate =
+    strUpdate +
+    `\\"application_time_old\\":\\"',deleted.application_time,'\\",` +
+    `\\"application_time_new\\":\\"',inserted.application_time,'\\",`;
+    strUpdate =
+    strUpdate +
+    `\\"application_user_old\\":\\"',deleted.application_user,'\\",` +
+    `\\"application_user_new\\":\\"',inserted.application_user,'\\"`;
+  strInsertDelete = strInsertDelete.substring(0, strInsertDelete.length);
+  strUpdate = strUpdate.substring(0, strUpdate.length);
 
   data =
     data +
@@ -74,8 +168,16 @@ parametrization.forEach((table) => {
 			select @data = concat('${strInsertDelete}') from deleted;
 		end
 		set @cmd = '${indexPath} {\\"metadata\\":{\\"database\\":\\"${database}\\",\\"table\\":\\"${table.table}\\",\\"transaction\\":\\"' + @transaction + '\\",\\"user\\":\\"' + REPLACE(SYSTEM_USER,'\\','_') + '\\"},\\"data\\":{' + @data + '}}'
-		EXEC Master..xp_cmdshell @cmd
-	 END
+    BEGIN TRY
+      BEGIN TRAN
+        EXEC Master..xp_cmdshell @cmd
+      COMMIT TRAN
+    END TRY
+    BEGIN CATCH
+      ROLLBACK TRAN;
+      THROW; -- raise error to the client
+    END CATCH
+    END
 	 GO
 	`;
 });

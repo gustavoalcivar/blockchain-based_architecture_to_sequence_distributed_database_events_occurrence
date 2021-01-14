@@ -1,4 +1,4 @@
-FROM telegraf:1.16-alpine
+FROM telegraf:alpine
 COPY  ./telegraf.conf /etc/telegraf/telegraf.conf
 EXPOSE 8125
 EXPOSE 8092
