@@ -26,4 +26,5 @@ else
 fi
 echo Start services...
 docker-compose -f /vagrant/docker/docker-compose-$1.yml up -d
+#docker-compose -f /vagrant/docker/docker-compose-$1.yml up -d --build
 echo Start services completed

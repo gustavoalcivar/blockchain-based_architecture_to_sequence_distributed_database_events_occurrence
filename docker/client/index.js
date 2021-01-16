@@ -50,6 +50,7 @@ app.get("/blocks/", async (req, res) => {
       });
       block.batches.push(batch);
     });
+    block.batches.reverse();
     result.blocks.push(block);
   });
   res.json(result);

@@ -10,6 +10,10 @@ export default async function getBlocks() {
             if(block.block_num !== "0") {
                 block.batches.forEach(batch => {
                     batch.transactions.forEach(transaction => {
+                        let jsonData = Object.assign({}, transaction.payload.data);
+                        delete jsonData["application_time"];
+                        delete jsonData["application_user"];
+                        let data = JSON.stringify(jsonData);
                         let trx = {
                             id: transaction.id,
                             block_num: block.block_num,
@@ -19,7 +23,7 @@ export default async function getBlocks() {
                             nonce: transaction.nonce,
                             payload: JSON.stringify(transaction.payload),
                             table: transaction.payload.metadata.table,
-                            data: JSON.stringify(transaction.payload.data),
+                            data: data,
                             host: transaction.payload.metadata.host,
                             application_time: transaction.payload.data.application_time,
                             blockchain_time: transaction.payload.metadata.datetime,
