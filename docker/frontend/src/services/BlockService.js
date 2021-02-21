@@ -25,6 +25,7 @@ export default async function getBlocks() {
                             table: transaction.payload.metadata.table,
                             data: data,
                             host: transaction.payload.metadata.host,
+                            blockchain_host: transaction.payload.metadata.blockchain_host,
                             application_time: transaction.payload.data.application_time,
                             blockchain_time: transaction.payload.metadata.datetime,
                             unixDatetime: transaction.payload.metadata.unixDatetime

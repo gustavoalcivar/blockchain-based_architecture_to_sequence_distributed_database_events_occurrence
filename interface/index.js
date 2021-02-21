@@ -1,5 +1,5 @@
 const { post } = require("axios");
-const os = require("os");
+const { hostname } = require("os");
 const unixTime = require("unix-time");
 const node_ip = "192.168.100.200"
 
@@ -17,7 +17,7 @@ const isJson = (data) => {
 if (input.trim() !== "{}" && isJson(input)) {
   let jsonInput = JSON.parse(input);
   let today = new Date();
-  jsonInput.metadata.host = os.hostname();
+  jsonInput.metadata.host = hostname();
   jsonInput.metadata.datetime = `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, "00")}-${today.getDate().toString().padStart(2, "00")} ${today.getHours().toString().padStart(2, "00")}:${today.getMinutes().toString().padStart(2, "00")}:${today.getSeconds().toString().padStart(2, "00")}.${today.getMilliseconds().toString().padStart(3, "000")}`;
   jsonInput.metadata.unixDatetime = unixTime(new Date()).toString();
   // La interfaz se conecta al servicio que expone el cliente de blockchain (este cliente se encuentra en el nodo0)

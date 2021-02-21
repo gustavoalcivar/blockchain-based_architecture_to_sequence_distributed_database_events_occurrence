@@ -5,7 +5,7 @@ import '../App.css';
 
 Modal.setAppElement('#root');
 
-export default function Block({ block_num, index, block_hash, previous_block_hash, signer_public_key, nonce, payload, table, data, host, application_time, blockchain_time, unixDatetime }) {
+export default function Block({ block_num, index, block_hash, previous_block_hash, signer_public_key, nonce, payload, table, data, host, blockchain_host, application_time, blockchain_time, unixDatetime }) {
     const [detailsIsOpen, setDetailsIsOpen] = useState(false);
     return(
         <TableRow>
@@ -15,6 +15,7 @@ export default function Block({ block_num, index, block_hash, previous_block_has
             <TableCell align="center">{table}</TableCell>
             <TableCell align="center">{data}</TableCell>
             <TableCell align="center">{host}</TableCell>
+            <TableCell align="center">{blockchain_host}</TableCell>
             <TableCell align="center">{application_time}</TableCell>
             <TableCell align="center">{blockchain_time}</TableCell>
             <Modal
@@ -46,6 +47,8 @@ export default function Block({ block_num, index, block_hash, previous_block_has
                 <Box fontWeight="fontWeightRegular" m={1}>{nonce}</Box>
                 <Box fontWeight="fontWeightBold" m={1}>Server</Box>
                 <Box fontWeight="fontWeightRegular" m={1}>{host}</Box>
+                <Box fontWeight="fontWeightBold" m={1}>Blockchain host</Box>
+                <Box fontWeight="fontWeightRegular" m={1}>{blockchain_host}</Box>
                 <Box fontWeight="fontWeightBold" m={1}>Table</Box>
                 <Box fontWeight="fontWeightRegular" m={1}>{table}</Box>
                 <Box fontWeight="fontWeightBold" m={1}>Application time</Box>

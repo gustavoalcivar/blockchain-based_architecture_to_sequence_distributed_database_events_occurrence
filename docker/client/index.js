@@ -2,6 +2,7 @@ const {saveAudit, viewBlocks} = require("./server.js");
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
+const { hostname } = require("os");
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -19,7 +20,9 @@ app.use((req, res, next) => {
 });
 
 app.post("/saveAudit/", async (req, res) => {
-  let data = await saveAudit(req.body);
+  let data0 = req.body;
+  data0.metadata.blockchain_host = hostname();
+  let data = await saveAudit(data0);
   if (data.err) res.json(data);
   res.json({ status: data.statusText, link: data.data.link });
 });

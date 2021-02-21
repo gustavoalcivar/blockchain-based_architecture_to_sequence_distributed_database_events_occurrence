@@ -2,7 +2,7 @@ const schema = "dbo";
 
 const database = "mybank";
 
-const indexPath = "node F:\\vagrant_docker_swarm\\interface\\index.js ";
+const indexPath = "node C:\\interface\\index.js ";
 
 const configTable = "blockchain_config";
 
