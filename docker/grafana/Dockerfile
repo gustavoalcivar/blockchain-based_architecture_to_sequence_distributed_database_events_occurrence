@@ -6,5 +6,7 @@ COPY grafana.ini /etc/grafana
 
 WORKDIR /app
 COPY grafana_entrypoint.sh ./
+USER root
+RUN chmod +x grafana_entrypoint.sh
 
 ENTRYPOINT ["/app/grafana_entrypoint.sh"]

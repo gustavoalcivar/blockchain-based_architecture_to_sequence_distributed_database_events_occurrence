@@ -55,7 +55,7 @@ services:
       - ./pbft-shared:/pbft-shared
     command: |
       bash -c "
-        if [ ! -e $HOME/.sawtooth/keys/my_key.priv ]; then
+        if [ ! -e /root/.sawtooth/keys/my_key.priv ]; then
           sawtooth keygen
           tail -f /dev/null
         fi
@@ -110,15 +110,15 @@ services:
           sawadm genesis config-genesis.batch config.batch
         fi &&
         if [ -e /pbft-shared/user_keys/my_key-0.priv ]; then
-          mkdir -p $HOME/.sawtooth/keys || true
-          cp /pbft-shared/user_keys/my_key-0.pub $HOME/.sawtooth/keys/my_key.pub
-          cp /pbft-shared/user_keys/my_key-0.priv $HOME/.sawtooth/keys/my_key.priv
+          mkdir -p /root/.sawtooth/keys || true
+          cp /pbft-shared/user_keys/my_key-0.pub /root/.sawtooth/keys/my_key.pub
+          cp /pbft-shared/user_keys/my_key-0.priv /root/.sawtooth/keys/my_key.priv
         fi &&
-        if [ ! -e $HOME/.sawtooth/keys/my_key.priv ]; then
+        if [ ! -e /root/.sawtooth/keys/my_key.priv ]; then
           sawtooth keygen my_key
           mkdir -p /pbft-shared/user_keys || true
-          cp $HOME/.sawtooth/keys/my_key.pub /pbft-shared/user_keys/my_key-0.pub
-          cp $HOME/.sawtooth/keys/my_key.priv /pbft-shared/user_keys/my_key-0.priv
+          cp /root/.sawtooth/keys/my_key.pub /pbft-shared/user_keys/my_key-0.pub
+          cp /root/.sawtooth/keys/my_key.priv /pbft-shared/user_keys/my_key-0.priv
         fi &&
         sawtooth-validator -vv \
           --endpoint tcp://validator-0:8800 \
@@ -225,25 +225,5 @@ services:
       - 8125:8125
       - 8092:8092
       - 8094:8094
-    networks:
-      - _network
-
-# --------=== frontend client ===--------
-
-  frontend:
-    image: frontend
-    container_name: frontend
-    expose:
-      - 5000
-    ports:
-      - "5000:5000"
-    environment:
-      - NODE=0
-      - API_PORT=4000
-      - PORT=5000
-    depends_on:
-      - client-0
-    build:
-      context: ./frontend
     networks:
       - _network

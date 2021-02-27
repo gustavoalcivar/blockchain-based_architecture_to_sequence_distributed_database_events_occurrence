@@ -69,15 +69,15 @@ services:
           cp /etc/sawtooth/keys/validator.priv /pbft-shared/validators/validator-2.priv
         fi &&
         if [ -e /pbft-shared/user_keys/my_key-2.priv ]; then
-          mkdir -p $HOME/.sawtooth/keys || true
-          cp /pbft-shared/user_keys/my_key-2.pub $HOME/.sawtooth/keys/my_key.pub
-          cp /pbft-shared/user_keys/my_key-2.priv $HOME/.sawtooth/keys/my_key.priv
+          mkdir -p /root/.sawtooth/keys || true
+          cp /pbft-shared/user_keys/my_key-2.pub /root/.sawtooth/keys/my_key.pub
+          cp /pbft-shared/user_keys/my_key-2.priv /root/.sawtooth/keys/my_key.priv
         fi &&
-        if [ ! -e $HOME/.sawtooth/keys/my_key.priv ]; then
+        if [ ! -e /root/.sawtooth/keys/my_key.priv ]; then
           sawtooth keygen my_key
           mkdir -p /pbft-shared/user_keys || true
-          cp $HOME/.sawtooth/keys/my_key.pub /pbft-shared/user_keys/my_key-2.pub
-          cp $HOME/.sawtooth/keys/my_key.priv /pbft-shared/user_keys/my_key-2.priv
+          cp /root/.sawtooth/keys/my_key.pub /pbft-shared/user_keys/my_key-2.pub
+          cp /root/.sawtooth/keys/my_key.priv /pbft-shared/user_keys/my_key-2.priv
         fi &&
         sawtooth-validator -vv \
           --endpoint tcp://validator-2:8800 \
