@@ -122,6 +122,7 @@ services:
 # --------=== blockchain client ===--------
 
   client-1:
+    hostname: node1
     image: client
     container_name: client-1
     expose:

@@ -23,6 +23,7 @@ export default async function getBlocks() {
                             nonce: transaction.nonce,
                             payload: JSON.stringify(transaction.payload),
                             table: transaction.payload.metadata.table,
+                            transaction: transaction.payload.metadata.transaction,
                             data: data,
                             host: transaction.payload.metadata.host,
                             blockchain_host: transaction.payload.metadata.blockchain_host,

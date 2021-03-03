@@ -5,7 +5,7 @@ import '../App.css';
 
 Modal.setAppElement('#root');
 
-export default function Block({ block_num, index, block_hash, previous_block_hash, signer_public_key, nonce, payload, table, data, host, blockchain_host, application_time, blockchain_time, unixDatetime }) {
+export default function Block({ block_num, index, block_hash, previous_block_hash, signer_public_key, nonce, payload, table, transaction, data, host, blockchain_host, application_time, blockchain_time, unixDatetime }) {
     const [detailsIsOpen, setDetailsIsOpen] = useState(false);
     return(
         <TableRow>
@@ -51,6 +51,8 @@ export default function Block({ block_num, index, block_hash, previous_block_has
                 <Box fontWeight="fontWeightRegular" m={1}>{blockchain_host}</Box>
                 <Box fontWeight="fontWeightBold" m={1}>Table</Box>
                 <Box fontWeight="fontWeightRegular" m={1}>{table}</Box>
+                <Box fontWeight="fontWeightBold" m={1}>Transaction</Box>
+                <Box fontWeight="fontWeightRegular" m={1}>{transaction}</Box>
                 <Box fontWeight="fontWeightBold" m={1}>Application time</Box>
                 <Box fontWeight="fontWeightRegular" m={1}>{application_time}</Box>
                 <Box fontWeight="fontWeightBold" m={1}>Blockchain time</Box>

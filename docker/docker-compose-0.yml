@@ -162,6 +162,7 @@ services:
 # --------=== blockchain client ===--------
 
   client-0:
+    hostname: node0
     image: client
     container_name: client-0
     expose:
@@ -199,7 +200,7 @@ services:
 # --------=== Influxdb ===--------
 
   influxdb:
-    image: influxdb:alpine
+    image: influxdb:1.8-alpine
     container_name: sawtooth-stats-influxdb
     environment:
       - INFLUXDB_DB=metrics

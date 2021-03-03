@@ -36,6 +36,7 @@ export default function Blockchain() {
                             nonce={block.nonce}
                             payload={block.payload}
                             table={block.table}
+                            transaction={block.transaction}
                             data={block.data}
                             host={block.host}
                             blockchain_host={block.blockchain_host}
