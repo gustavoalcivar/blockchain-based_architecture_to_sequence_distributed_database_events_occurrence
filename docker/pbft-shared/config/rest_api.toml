@@ -28,7 +28,7 @@
 #   timeout = 300
 
 # The host and port for Open TSDB database used for metrics
-opentsdb_url = "http://192.168.100.200:8086"
+opentsdb_url = "http://10.142.0.2:8086"
 
 # The name of the database used for storing metrics
 opentsdb_db = "metrics"

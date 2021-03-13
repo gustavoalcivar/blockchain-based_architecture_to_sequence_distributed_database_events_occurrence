@@ -1,7 +1,5 @@
-const apiURL = "http://192.168.100.200:4000/blocks";
-
 export default async function getBlocks() {
-    return fetch(apiURL)
+    return fetch(`${window.location.href.split(":")[0]}:${window.location.href.split(":")[1]}:4000/blocks`.replace("/:", ":"))
     .then(res => res.json())
     .then(response => {
         const trxs = [];

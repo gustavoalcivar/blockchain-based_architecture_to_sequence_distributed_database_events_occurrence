@@ -87,6 +87,26 @@ services:
           cp /etc/sawtooth/keys/validator.pub /pbft-shared/validators/validator-0.pub
           cp /etc/sawtooth/keys/validator.priv /pbft-shared/validators/validator-0.priv
         fi &&
+        if [ ! -e config-genesis.batch ]; then
+          sawset genesis -k /etc/sawtooth/keys/validator.priv -o config-genesis.batch
+        fi &&
+        while [[ ! -f /pbft-shared/validators/validator-1.pub || \
+                 ! -f /pbft-shared/validators/validator-2.pub || \
+                 ! -f /pbft-shared/validators/validator-3.pub ]];
+        do sleep 1; done
+        echo sawtooth.consensus.pbft.members=\\['\"'$$(cat /pbft-shared/validators/validator-0.pub)'\"','\"'$$(cat /pbft-shared/validators/validator-1.pub)'\"','\"'$$(cat /pbft-shared/validators/validator-2.pub)'\"','\"'$$(cat /pbft-shared/validators/validator-3.pub)'\"'\\] &&
+        if [ ! -e config.batch ]; then
+         sawset proposal create \
+            -k /etc/sawtooth/keys/validator.priv \
+            sawtooth.consensus.algorithm.name=pbft \
+            sawtooth.consensus.algorithm.version=1.0 \
+            sawtooth.consensus.pbft.members=\\['\"'$$(cat /pbft-shared/validators/validator-0.pub)'\"','\"'$$(cat /pbft-shared/validators/validator-1.pub)'\"','\"'$$(cat /pbft-shared/validators/validator-2.pub)'\"','\"'$$(cat /pbft-shared/validators/validator-3.pub)'\"'\\] \
+            sawtooth.publisher.max_batches_per_block=1200 \
+            -o config.batch
+        fi &&
+        if [ ! -e /var/lib/sawtooth/genesis.batch ]; then
+          sawadm genesis config-genesis.batch config.batch
+        fi &&
         if [ -e /pbft-shared/user_keys/my_key-0.priv ]; then
           mkdir -p /root/.sawtooth/keys || true
           cp /pbft-shared/user_keys/my_key-0.pub /root/.sawtooth/keys/my_key.pub

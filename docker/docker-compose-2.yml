@@ -64,7 +64,6 @@ services:
         fi &&
         if [ ! -e /etc/sawtooth/keys/validator.priv ]; then
           sawadm keygen
-          mkdir -p /pbft-shared/validators || true
           cp /etc/sawtooth/keys/validator.pub /pbft-shared/validators/validator-2.pub
           cp /etc/sawtooth/keys/validator.priv /pbft-shared/validators/validator-2.priv
         fi &&
@@ -75,7 +74,6 @@ services:
         fi &&
         if [ ! -e /root/.sawtooth/keys/my_key.priv ]; then
           sawtooth keygen my_key
-          mkdir -p /pbft-shared/user_keys || true
           cp /root/.sawtooth/keys/my_key.pub /pbft-shared/user_keys/my_key-2.pub
           cp /root/.sawtooth/keys/my_key.priv /pbft-shared/user_keys/my_key-2.priv
         fi &&

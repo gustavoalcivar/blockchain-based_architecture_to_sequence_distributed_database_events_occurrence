@@ -1,8 +1,8 @@
 # vagrant_docker_swarm
-docker-compose -f /vagrant/docker/docker-compose-0.yml logs --tail=30 --follow
-docker-compose -f /vagrant/docker/docker-compose-1.yml logs --tail=30 --follow
-docker-compose -f /vagrant/docker/docker-compose-2.yml logs --tail=30 --follow
-docker-compose -f /vagrant/docker/docker-compose-3.yml logs --tail=30 --follow
+docker-compose -f $HOME/blockchain/docker/docker-compose-0.yml logs --tail=30 --follow
+docker-compose -f $HOME/blockchain/docker/docker-compose-1.yml logs --tail=30 --follow
+docker-compose -f $HOME/blockchain/docker/docker-compose-2.yml logs --tail=30 --follow
+docker-compose -f $HOME/blockchain/docker/docker-compose-3.yml logs --tail=30 --follow
 
 
 # Ejemplo de llamada a la blockchain
@@ -11,7 +11,7 @@ node F:\vagrant_docker_swarm\interface\index.js  '{\"metadata\":{\"database\":\"
 
 EN EL NODO 0
 ---------------------------------------------------------------------------------------
-sudo apt-get install nfs-kernel-server
+sudo apt-get install -y nfs-kernel-server
 sudo nano /etc/exports
 Añadir una línea por cada equipo al w¡q se quiera compartir (o con .0 para compartir con toda la red)
 /ruta/carpeta/a/compartir 192.168.1.0/24(rw,no_subtree_check,async)
@@ -20,9 +20,9 @@ sudo systemctl enable nfs-kernel-server
 sudo systemctl start nfs-kernel-server
 
 
-EN TODOS LOS NODOS
+EN LOS DEMÁS NODOS
 ----------------------------------------------------------------------------------------
-sudo apt install nfs-common
+sudo apt-get install -y nfs-common
 sudo mkdir -P /ruta/para/contenido/carpeta/compartida/
 sudo nano /etc/fstab
 Añadir la línea
@@ -33,35 +33,33 @@ BLOCKCHAIN
 ----------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------
 
+# Eliminar todo de docker
+sudo docker system prune --all
+
 EN TODOS LOS NODOS
 ----------------------------------------------------------------------------------------
-docker stop $(docker ps -a -q)
-docker rm -f $(docker ps -a -q)
-docker volume rm -f $(docker volume ls -q)
-docker swarm leave -f
-docker network prune -f
+sh $HOME/blockchain/scripts/restart/restart.sh
+OR
+sh $HOME/blockchain/scripts/restart/restart_delete_data.sh
 
-EN EL NODO 0
+EN CADA NODO
 ---------------------------------------------------------------------------------------
-sudo chmod -R 777 /home/gustavobsc5/docker/
-docker swarm init --listen-addr 10.142.0.2:2377 --advertise-addr 10.142.0.2:2377
-docker swarm join-token --quiet manager > /home/gustavobsc5/docker/token
-docker network create --attachable --driver overlay audit_network
-
-EN LOS DEMÁS NODOS
-----------------------------------------------------------------------------------------
-docker swarm join --token $(cat /home/gustavobsc5/docker/token) 10.142.0.2:2377 --advertise-addr 10.142.0.3:2377
-
-docker swarm join --token $(cat /home/gustavobsc5/docker/token) 10.142.0.2:2377 --advertise-addr 10.142.0.4:2377
-
-docker swarm join --token $(cat /home/gustavobsc5/docker/token) 10.142.0.2:2377 --advertise-addr 10.142.0.5:2377
+sh $HOME/blockchain/scripts/docker_swarm/docker_swarm_0.sh
+sh $HOME/blockchain/scripts/docker_swarm/docker_swarm_1.sh
+sh $HOME/blockchain/scripts/docker_swarm/docker_swarm_2.sh
+sh $HOME/blockchain/scripts/docker_swarm/docker_swarm_3.sh
 
 EN CADA NODO
 ------------------------------------------------------------------------------------------
-docker-compose -f /home/gustavobsc5/docker/docker-compose-0.yml up
 
-docker-compose -f /home/gustavobsc5/docker/docker-compose-1.yml up
+sh $HOME/blockchain/scripts/run/run_0.sh
+OR
+sh $HOME/blockchain/scripts/run/run_0_0.sh
 
-docker-compose -f /home/gustavobsc5/docker/docker-compose-2.yml up
+sh $HOME/blockchain/scripts/run/run_1.sh
+sh $HOME/blockchain/scripts/run/run_2.sh
+sh $HOME/blockchain/scripts/run/run_3.sh
 
-docker-compose -f /home/gustavobsc5/docker/docker-compose-3.yml up
+NOTAS
+------------------------------------------------------------------------------------------
+Habilitar conexiones externas y login mediante usuario y contraseña en sql server

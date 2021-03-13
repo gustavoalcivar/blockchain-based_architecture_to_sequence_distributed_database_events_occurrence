@@ -1,4 +1,3 @@
 token
-.vagrant/
 interface/node_modules/
 interface/*.sql
