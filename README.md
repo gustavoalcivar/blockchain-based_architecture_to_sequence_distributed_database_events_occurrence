@@ -4,17 +4,17 @@ docker-compose -f $HOME/blockchain/docker/docker-compose-1.yml logs --tail=30 --
 docker-compose -f $HOME/blockchain/docker/docker-compose-2.yml logs --tail=30 --follow
 docker-compose -f $HOME/blockchain/docker/docker-compose-3.yml logs --tail=30 --follow
 
-
-# Ejemplo de llamada a la blockchain
-node F:\vagrant_docker_swarm\interface\index.js  '{\"metadata\":{\"database\":\"mybank\",\"table\":\"transacciones\",\"transaction\":\"INSERT\",\"user\":\"gaar\",\"host\":\"GUSTAVO-PC\",\"datetime\":\"Wed Jan 13 2021 16:46:56 GMT-0500 (Ecuador Time)\",\"unixDatetime\":\"1610574416\"},\"data\":{\"id\":\"13344\",\"monto\":\"6966\",\"id_cuenta_bancaria\":\"1\",\"id_tipo_transaccion\":\"2\",\"application_time\":\"2021-01-13 16:46:53.17\",\"application_user\":\"FVNMI\"}}'
-
-
 EN EL NODO 0
 ---------------------------------------------------------------------------------------
+sudo hostnamectl set-hostname node0
+sudo apt-get update
 sudo apt-get install -y nfs-kernel-server
 sudo nano /etc/exports
-Añadir una línea por cada equipo al w¡q se quiera compartir (o con .0 para compartir con toda la red)
+Añadir una línea por cada equipo al que se quiera compartir (o con .0 para compartir con toda la red)
 /ruta/carpeta/a/compartir 192.168.1.0/24(rw,no_subtree_check,async)
+/home/gustavobsc5/blockchain 10.142.0.3(rw,no_subtree_check)
+/home/gustavobsc5/blockchain 10.142.0.4(rw,no_subtree_check)
+/home/gustavobsc5/blockchain 10.142.0.5(rw,no_subtree_check)
 sudo exportfs -arv
 sudo systemctl enable nfs-kernel-server
 sudo systemctl start nfs-kernel-server
@@ -22,11 +22,15 @@ sudo systemctl start nfs-kernel-server
 
 EN LOS DEMÁS NODOS
 ----------------------------------------------------------------------------------------
+sudo hostnamectl set-hostname node0 | sudo hostnamectl set-hostname node1 | sudo hostnamectl set-hostname node2 | sudo hostnamectl set-hostname node3
+sudo apt-get update
 sudo apt-get install -y nfs-common
-sudo mkdir -P /ruta/para/contenido/carpeta/compartida/
+mkdir -p /ruta/para/contenido/carpeta/compartida/
+mkdir -p /home/gustavobsc5/blockchain/
 sudo nano /etc/fstab
 Añadir la línea
 IP_SERVIDOR:/ruta/carpeta/a/compartir /ruta/para/contenido/carpeta/compartida/ nfs rw,async 0 0
+10.142.0.2:/home/gustavobsc5/blockchain /home/gustavobsc5/blockchain/ nfs rw 0 0
 sudo mount -a
 
 BLOCKCHAIN
@@ -38,28 +42,34 @@ sudo docker system prune --all
 
 EN TODOS LOS NODOS
 ----------------------------------------------------------------------------------------
-sh $HOME/blockchain/scripts/restart/restart.sh
-OR
-sh $HOME/blockchain/scripts/restart/restart_delete_data.sh
+sh $HOME/blockchain/scripts/restart.sh
 
 EN CADA NODO
 ---------------------------------------------------------------------------------------
-sh $HOME/blockchain/scripts/docker_swarm/docker_swarm_0.sh
-sh $HOME/blockchain/scripts/docker_swarm/docker_swarm_1.sh
-sh $HOME/blockchain/scripts/docker_swarm/docker_swarm_2.sh
-sh $HOME/blockchain/scripts/docker_swarm/docker_swarm_3.sh
+sh $HOME/blockchain/scripts/docker_swarm.sh
 
 EN CADA NODO
 ------------------------------------------------------------------------------------------
+sh $HOME/blockchain/scripts/run.sh
 
-sh $HOME/blockchain/scripts/run/run_0.sh
-OR
-sh $HOME/blockchain/scripts/run/run_0_0.sh
+EN EL CLIENTE
+---------------------------------------------------------------------------------------
+sudo apt-get update
+sudo apt-get install -y tightvncserver openjdk-11-jre tasksel
+sudo tasksel install xubuntu-desktop
+vncserver
 
-sh $HOME/blockchain/scripts/run/run_1.sh
-sh $HOME/blockchain/scripts/run/run_2.sh
-sh $HOME/blockchain/scripts/run/run_3.sh
+Start VNC server
+vncserver
+
+Client: Real VNC viewer
+https://www.realvnc.com/es/connect/download/viewer/
 
 NOTAS
 ------------------------------------------------------------------------------------------
 Habilitar conexiones externas y login mediante usuario y contraseña en sql server
+
+
+https://blog.maskalik.com/sql-server-service-broker/scalable-webservice-calls-from-database/
+
+https://www.sqlshack.com/using-the-sql-server-service-broker-for-asynchronous-processing/
