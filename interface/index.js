@@ -1,29 +1,36 @@
+const Sqlssb = require("sqlssb");
 const { post } = require("axios");
+const { xmlToJson } = require("./functions");
 const { hostname } = require("os");
 const unixTime = require("unix-time");
-const node_ip = "192.168.100.200"
 
-let input = process.argv.slice(2).join(" ");
-
-const isJson = (data) => {
-  try {
-    JSON.parse(data);
-  } catch (error) {
-    return false;
-  }
-  return true;
-};
-
-if (input.trim() !== "{}" && isJson(input)) {
-  let jsonInput = JSON.parse(input);
-  let today = new Date();
-  jsonInput.metadata.host = hostname();
-  jsonInput.metadata.datetime = `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, "00")}-${today.getDate().toString().padStart(2, "00")} ${today.getHours().toString().padStart(2, "00")}:${today.getMinutes().toString().padStart(2, "00")}:${today.getSeconds().toString().padStart(2, "00")}.${today.getMilliseconds().toString().padStart(3, "000")}`;
-  jsonInput.metadata.unixDatetime = unixTime(new Date()).toString();
+const service1 = new Sqlssb({
+  user: "gaar",
+  password: "gaar",
+  server: "localhost",
+  database: "mybank",
+  service: "TargetService",
+  queue: "TargetQueue"
+})
+ 
+service1.on("http://audit_blockchail/RequestMessage", ctx => {
+  let json = xmlToJson(ctx.messageBody);
+  //let json = {};
+  /*let today = new Date();
+  json.host = hostname();
+  json.datetime = `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, "00")}-${today.getDate().toString().padStart(2, "00")} ${today.getHours().toString().padStart(2, "00")}:${today.getMinutes().toString().padStart(2, "00")}:${today.getSeconds().toString().padStart(2, "00")}.${today.getMilliseconds().toString().padStart(3, "000")}`;
+  json.unixDatetime = unixTime(new Date()).toString();
+  json.data = ctx.messageBody;
+  console.log(json);
   // La interfaz se conecta al servicio que expone el cliente de blockchain (este cliente se encuentra en el nodo0)
-  post(`http://${node_ip}:${process.env.PORT || 4000}/saveAudit/`, jsonInput, {
+  post(`http://localhost:4000/saveAudit/`, json, {
     headers: { "Content-Type": "application/json" },
   })
     .then((response) => console.log(response.data))
-    .catch((err) => console.log("err", err));
-} else console.log("ERROR: Invalid data", input);
+    .catch((err) => console.log("err", err));*/
+  });
+ 
+service1.start({ //default settings:
+  timeout: 5000, //5 seconds
+  count: 1 //one message at a time
+})

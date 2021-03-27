@@ -1,15 +1,17 @@
 {
-  "name": "sawtooth",
-  "version": "0.0.1",
+  "name": "interface2",
+  "version": "1.0.0",
   "description": "",
-  "main": "",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Gustavo Alcívar",
+  "keywords": [],
+  "author": "",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.21.1",
+    "sqlssb": "0.0.2",
     "unix-time": "^1.0.1"
   }
 }

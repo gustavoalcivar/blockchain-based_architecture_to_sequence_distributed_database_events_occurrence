@@ -2,14 +2,6 @@ const schema = "dbo";
 
 const database = "mybank";
 
-const indexPath = "node C:\\interface\\index.js ";
-
-const configTable = "blockchain_config";
-
-const configColumn = "active";
-
-const configWhereClause = "1 = 1"; // Example: param = 'active_blockchain' AND value = 1
-
 const parametrization = [
   {
     table: "transacciones",
@@ -32,9 +24,5 @@ const parametrization = [
 module.exports = {
   schema,
   database,
-  indexPath,
-  configTable,
-  configColumn,
-  configWhereClause,
   parametrization,
 };
