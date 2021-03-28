@@ -8,9 +8,17 @@ export default async function getBlocks() {
             if(block.block_num !== "0") {
                 block.batches.forEach(batch => {
                     batch.transactions.forEach(transaction => {
-                        let jsonData = Object.assign({}, transaction.payload.data);
+                        let jsonData = Object.assign({}, transaction.payload);
                         delete jsonData["application_time"];
                         delete jsonData["application_user"];
+                        delete jsonData["database"];
+                        delete jsonData["table"];
+                        delete jsonData["transaction"];
+                        delete jsonData["user"];
+                        delete jsonData["host"];
+                        delete jsonData["datetime"];
+                        delete jsonData["unixDatetime"];
+                        delete jsonData["blockchain_host"];
                         let data = JSON.stringify(jsonData);
                         let trx = {
                             id: transaction.id,
@@ -20,14 +28,14 @@ export default async function getBlocks() {
                             signer_public_key: transaction.signer_public_key,
                             nonce: transaction.nonce,
                             payload: JSON.stringify(transaction.payload),
-                            table: transaction.payload.metadata.table,
-                            transaction: transaction.payload.metadata.transaction,
+                            table: transaction.payload.table,
+                            transaction: transaction.payload.transaction,
                             data: data,
-                            host: transaction.payload.metadata.host,
-                            blockchain_host: transaction.payload.metadata.blockchain_host,
-                            application_time: transaction.payload.data.application_time,
-                            blockchain_time: transaction.payload.metadata.datetime,
-                            unixDatetime: transaction.payload.metadata.unixDatetime
+                            host: transaction.payload.host,
+                            blockchain_host: transaction.payload.blockchain_host,
+                            application_time: transaction.payload.application_time,
+                            blockchain_time: transaction.payload.datetime,
+                            unixDatetime: transaction.payload.unixDatetime
                         };
                         trxs.push(trx);
                     });

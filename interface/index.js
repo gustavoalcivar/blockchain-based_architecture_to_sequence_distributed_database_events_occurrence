@@ -15,19 +15,16 @@ const service1 = new Sqlssb({
  
 service1.on("http://audit_blockchail/RequestMessage", ctx => {
   let json = xmlToJson(ctx.messageBody);
-  //let json = {};
-  /*let today = new Date();
+  let today = new Date();
   json.host = hostname();
   json.datetime = `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, "00")}-${today.getDate().toString().padStart(2, "00")} ${today.getHours().toString().padStart(2, "00")}:${today.getMinutes().toString().padStart(2, "00")}:${today.getSeconds().toString().padStart(2, "00")}.${today.getMilliseconds().toString().padStart(3, "000")}`;
   json.unixDatetime = unixTime(new Date()).toString();
-  json.data = ctx.messageBody;
-  console.log(json);
   // La interfaz se conecta al servicio que expone el cliente de blockchain (este cliente se encuentra en el nodo0)
   post(`http://localhost:4000/saveAudit/`, json, {
     headers: { "Content-Type": "application/json" },
   })
     .then((response) => console.log(response.data))
-    .catch((err) => console.log("err", err));*/
+    .catch((err) => console.log("err", err));
   });
  
 service1.start({ //default settings:
