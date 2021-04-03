@@ -1,11 +1,17 @@
 # vagrant_docker_swarm
+
+Puertos habilitados GCP: 1433,80,4000,3000
+
 docker-compose -f $HOME/blockchain/docker/docker-compose-0.yml logs --tail=30 --follow
 docker-compose -f $HOME/blockchain/docker/docker-compose-1.yml logs --tail=30 --follow
 docker-compose -f $HOME/blockchain/docker/docker-compose-2.yml logs --tail=30 --follow
 docker-compose -f $HOME/blockchain/docker/docker-compose-3.yml logs --tail=30 --follow
 
+tail -f $HOME/blockchain/interface/interface.log
+
 EN EL NODO 0
 ---------------------------------------------------------------------------------------
+sudo ufw disable
 sudo hostnamectl set-hostname node0
 sudo apt-get update
 sudo apt-get install -y nfs-kernel-server
@@ -22,6 +28,7 @@ sudo systemctl start nfs-kernel-server
 
 EN LOS DEMÁS NODOS
 ----------------------------------------------------------------------------------------
+sudo ufw disable
 sudo hostnamectl set-hostname node0 | sudo hostnamectl set-hostname node1 | sudo hostnamectl set-hostname node2 | sudo hostnamectl set-hostname node3
 sudo apt-get update
 sudo apt-get install -y nfs-common
@@ -55,6 +62,8 @@ sh $HOME/blockchain/scripts/run.sh
 EN DESARROLLO
 ------------------------------------------------------------------------------------------
 docker-compose -f docker-compose-dev.yml up --force
+
+sh $HOME/blockchain/scripts/run_interface.sh
 
 EN EL CLIENTE
 ---------------------------------------------------------------------------------------
