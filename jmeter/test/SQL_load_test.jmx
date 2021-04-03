@@ -18,51 +18,169 @@
           <boolProp name="LoopController.continue_forever">false</boolProp>
           <stringProp name="LoopController.loops">1</stringProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">100</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">100</stringProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
       <hashTree>
-        <JDBCDataSource guiclass="TestBeanGUI" testclass="JDBCDataSource" testname="JDBC Connection Configuration" enabled="true">
+        <JDBCDataSource guiclass="TestBeanGUI" testclass="JDBCDataSource" testname="JDBC Connection Configuration 0" enabled="true">
           <boolProp name="autocommit">true</boolProp>
           <stringProp name="checkQuery"></stringProp>
           <stringProp name="connectionAge">5000</stringProp>
           <stringProp name="connectionProperties"></stringProp>
-          <stringProp name="dataSource">Test_Pool</stringProp>
-          <stringProp name="dbUrl">jdbc:sqlserver://localhost:2301;DatabaseName=mybank;</stringProp>
+          <stringProp name="dataSource">Test_Pool_0</stringProp>
+          <stringProp name="dbUrl">jdbc:sqlserver://10.142.0.2:1433;DatabaseName=mybank;</stringProp>
           <stringProp name="driver">com.microsoft.sqlserver.jdbc.SQLServerDriver</stringProp>
           <stringProp name="initQuery"></stringProp>
           <boolProp name="keepAlive">true</boolProp>
-          <stringProp name="password">GaarGaar2021</stringProp>
-          <stringProp name="poolMax">100</stringProp>
+          <stringProp name="password">password</stringProp>
+          <stringProp name="poolMax">1000</stringProp>
           <boolProp name="preinit">false</boolProp>
           <stringProp name="timeout">10000</stringProp>
           <stringProp name="transactionIsolation">DEFAULT</stringProp>
           <stringProp name="trimInterval">60000</stringProp>
-          <stringProp name="username">gaar</stringProp>
+          <stringProp name="username">SA</stringProp>
         </JDBCDataSource>
         <hashTree/>
-        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="JDBC Request" enabled="true">
-          <stringProp name="dataSource">Test_Pool</stringProp>
-          <stringProp name="query">exec insert_transacciones_store_procedure
+        <JDBCDataSource guiclass="TestBeanGUI" testclass="JDBCDataSource" testname="JDBC Connection Configuration 1" enabled="true">
+          <boolProp name="autocommit">true</boolProp>
+          <stringProp name="checkQuery"></stringProp>
+          <stringProp name="connectionAge">5000</stringProp>
+          <stringProp name="connectionProperties"></stringProp>
+          <stringProp name="dataSource">Test_Pool_1</stringProp>
+          <stringProp name="dbUrl">jdbc:sqlserver://10.142.0.3:1433;DatabaseName=mybank;</stringProp>
+          <stringProp name="driver">com.microsoft.sqlserver.jdbc.SQLServerDriver</stringProp>
+          <stringProp name="initQuery"></stringProp>
+          <boolProp name="keepAlive">true</boolProp>
+          <stringProp name="password">password</stringProp>
+          <stringProp name="poolMax">1000</stringProp>
+          <boolProp name="preinit">false</boolProp>
+          <stringProp name="timeout">10000</stringProp>
+          <stringProp name="transactionIsolation">DEFAULT</stringProp>
+          <stringProp name="trimInterval">60000</stringProp>
+          <stringProp name="username">SA</stringProp>
+        </JDBCDataSource>
+        <hashTree/>
+        <JDBCDataSource guiclass="TestBeanGUI" testclass="JDBCDataSource" testname="JDBC Connection Configuration 2" enabled="true">
+          <boolProp name="autocommit">true</boolProp>
+          <stringProp name="checkQuery"></stringProp>
+          <stringProp name="connectionAge">5000</stringProp>
+          <stringProp name="connectionProperties"></stringProp>
+          <stringProp name="dataSource">Test_Pool_2</stringProp>
+          <stringProp name="dbUrl">jdbc:sqlserver://10.142.0.4:1433;DatabaseName=mybank;</stringProp>
+          <stringProp name="driver">com.microsoft.sqlserver.jdbc.SQLServerDriver</stringProp>
+          <stringProp name="initQuery"></stringProp>
+          <boolProp name="keepAlive">true</boolProp>
+          <stringProp name="password">password</stringProp>
+          <stringProp name="poolMax">1000</stringProp>
+          <boolProp name="preinit">false</boolProp>
+          <stringProp name="timeout">10000</stringProp>
+          <stringProp name="transactionIsolation">DEFAULT</stringProp>
+          <stringProp name="trimInterval">60000</stringProp>
+          <stringProp name="username">SA</stringProp>
+        </JDBCDataSource>
+        <hashTree/>
+        <JDBCDataSource guiclass="TestBeanGUI" testclass="JDBCDataSource" testname="JDBC Connection Configuration 3" enabled="true">
+          <boolProp name="autocommit">true</boolProp>
+          <stringProp name="checkQuery"></stringProp>
+          <stringProp name="connectionAge">5000</stringProp>
+          <stringProp name="connectionProperties"></stringProp>
+          <stringProp name="dataSource">Test_Pool_3</stringProp>
+          <stringProp name="dbUrl">jdbc:sqlserver://10.142.0.5:1433;DatabaseName=mybank;</stringProp>
+          <stringProp name="driver">com.microsoft.sqlserver.jdbc.SQLServerDriver</stringProp>
+          <stringProp name="initQuery"></stringProp>
+          <boolProp name="keepAlive">true</boolProp>
+          <stringProp name="password">password</stringProp>
+          <stringProp name="poolMax">1000</stringProp>
+          <boolProp name="preinit">false</boolProp>
+          <stringProp name="timeout">10000</stringProp>
+          <stringProp name="transactionIsolation">DEFAULT</stringProp>
+          <stringProp name="trimInterval">60000</stringProp>
+          <stringProp name="username">SA</stringProp>
+        </JDBCDataSource>
+        <hashTree/>
+        <com.blazemeter.jmeter.controller.ParallelSampler guiclass="com.blazemeter.jmeter.controller.ParallelControllerGui" testclass="com.blazemeter.jmeter.controller.ParallelSampler" testname="bzm - Parallel Controller" enabled="true">
+          <intProp name="MAX_THREAD_NUMBER">6</intProp>
+          <boolProp name="PARENT_SAMPLE">false</boolProp>
+          <boolProp name="LIMIT_MAX_THREAD_NUMBER">false</boolProp>
+        </com.blazemeter.jmeter.controller.ParallelSampler>
+        <hashTree>
+          <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="JDBC Request 0" enabled="true">
+            <stringProp name="dataSource">Test_Pool_0</stringProp>
+            <stringProp name="query">exec insert_transacciones_store_procedure
 @monto=${__Random(1,9999,)},
 @id_cuenta_bancaria=${__Random(1,2,)},
 @id_tipo_transaccion=${__Random(1,2,)},
 @application_time=&apos;${__time(yyy-MM-dd HH:mm:ss.SSS,)}&apos;,
 @application_user=&apos;${__RandomString(5,ABCDEFGHIJKLMNOPQRSTUVWXYZ,)}&apos;;</stringProp>
-          <stringProp name="queryArguments"></stringProp>
-          <stringProp name="queryArgumentsTypes"></stringProp>
-          <stringProp name="queryTimeout"></stringProp>
-          <stringProp name="queryType">Callable Statement</stringProp>
-          <stringProp name="resultSetHandler">Store as String</stringProp>
-          <stringProp name="resultSetMaxRows"></stringProp>
-          <stringProp name="resultVariable"></stringProp>
-          <stringProp name="variableNames"></stringProp>
-        </JDBCSampler>
-        <hashTree/>
+            <stringProp name="queryArguments"></stringProp>
+            <stringProp name="queryArgumentsTypes"></stringProp>
+            <stringProp name="queryTimeout"></stringProp>
+            <stringProp name="queryType">Callable Statement</stringProp>
+            <stringProp name="resultSetHandler">Store as String</stringProp>
+            <stringProp name="resultSetMaxRows"></stringProp>
+            <stringProp name="resultVariable"></stringProp>
+            <stringProp name="variableNames"></stringProp>
+          </JDBCSampler>
+          <hashTree/>
+          <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="JDBC Request 1" enabled="true">
+            <stringProp name="dataSource">Test_Pool_1</stringProp>
+            <stringProp name="query">exec insert_transacciones_store_procedure
+@monto=${__Random(1,9999,)},
+@id_cuenta_bancaria=${__Random(1,2,)},
+@id_tipo_transaccion=${__Random(1,2,)},
+@application_time=&apos;${__time(yyy-MM-dd HH:mm:ss.SSS,)}&apos;,
+@application_user=&apos;${__RandomString(5,ABCDEFGHIJKLMNOPQRSTUVWXYZ,)}&apos;;</stringProp>
+            <stringProp name="queryArguments"></stringProp>
+            <stringProp name="queryArgumentsTypes"></stringProp>
+            <stringProp name="queryTimeout"></stringProp>
+            <stringProp name="queryType">Callable Statement</stringProp>
+            <stringProp name="resultSetHandler">Store as String</stringProp>
+            <stringProp name="resultSetMaxRows"></stringProp>
+            <stringProp name="resultVariable"></stringProp>
+            <stringProp name="variableNames"></stringProp>
+          </JDBCSampler>
+          <hashTree/>
+          <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="JDBC Request 2" enabled="true">
+            <stringProp name="dataSource">Test_Pool_2</stringProp>
+            <stringProp name="query">exec insert_transacciones_store_procedure
+@monto=${__Random(1,9999,)},
+@id_cuenta_bancaria=${__Random(1,2,)},
+@id_tipo_transaccion=${__Random(1,2,)},
+@application_time=&apos;${__time(yyy-MM-dd HH:mm:ss.SSS,)}&apos;,
+@application_user=&apos;${__RandomString(5,ABCDEFGHIJKLMNOPQRSTUVWXYZ,)}&apos;;</stringProp>
+            <stringProp name="queryArguments"></stringProp>
+            <stringProp name="queryArgumentsTypes"></stringProp>
+            <stringProp name="queryTimeout"></stringProp>
+            <stringProp name="queryType">Callable Statement</stringProp>
+            <stringProp name="resultSetHandler">Store as String</stringProp>
+            <stringProp name="resultSetMaxRows"></stringProp>
+            <stringProp name="resultVariable"></stringProp>
+            <stringProp name="variableNames"></stringProp>
+          </JDBCSampler>
+          <hashTree/>
+          <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="JDBC Request 3" enabled="true">
+            <stringProp name="dataSource">Test_Pool_3</stringProp>
+            <stringProp name="query">exec insert_transacciones_store_procedure
+@monto=${__Random(1,9999,)},
+@id_cuenta_bancaria=${__Random(1,2,)},
+@id_tipo_transaccion=${__Random(1,2,)},
+@application_time=&apos;${__time(yyy-MM-dd HH:mm:ss.SSS,)}&apos;,
+@application_user=&apos;${__RandomString(5,ABCDEFGHIJKLMNOPQRSTUVWXYZ,)}&apos;;</stringProp>
+            <stringProp name="queryArguments"></stringProp>
+            <stringProp name="queryArgumentsTypes"></stringProp>
+            <stringProp name="queryTimeout"></stringProp>
+            <stringProp name="queryType">Callable Statement</stringProp>
+            <stringProp name="resultSetHandler">Store as String</stringProp>
+            <stringProp name="resultSetMaxRows"></stringProp>
+            <stringProp name="resultVariable"></stringProp>
+            <stringProp name="variableNames"></stringProp>
+          </JDBCSampler>
+          <hashTree/>
+        </hashTree>
         <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>

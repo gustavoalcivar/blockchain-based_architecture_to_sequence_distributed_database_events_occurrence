@@ -59,24 +59,11 @@ EN CADA NODO
 ------------------------------------------------------------------------------------------
 sh $HOME/blockchain/scripts/run.sh
 
+sh $HOME/blockchain/scripts/run_interface.sh
+
 EN DESARROLLO
 ------------------------------------------------------------------------------------------
 docker-compose -f docker-compose-dev.yml up --force
-
-sh $HOME/blockchain/scripts/run_interface.sh
-
-EN EL CLIENTE
----------------------------------------------------------------------------------------
-sudo apt-get update
-sudo apt-get install -y tightvncserver openjdk-11-jre tasksel
-sudo tasksel install xubuntu-desktop
-vncserver
-
-Start VNC server
-vncserver
-
-Client: Real VNC viewer
-https://www.realvnc.com/es/connect/download/viewer/
 
 NOTAS
 ------------------------------------------------------------------------------------------
@@ -86,3 +73,5 @@ Habilitar conexiones externas y login mediante usuario y contraseña en sql serv
 https://blog.maskalik.com/sql-server-service-broker/scalable-webservice-calls-from-database/
 
 https://www.sqlshack.com/using-the-sql-server-service-broker-for-asynchronous-processing/
+
+https://sqa.stackexchange.com/questions/46305/jmeter-how-do-i-run-parallel-jdbc-requests-in-jmeter
