@@ -3,6 +3,8 @@ version: '3.6'
 volumes:
   pbft-shared:
   blockchain_data:
+  influxdb_data:
+  grafana_data:
 
 networks:
   _network:
@@ -183,6 +185,8 @@ services:
 
   sawtooth-stats-grafana:
     container_name: sawtooth-stats-grafana
+    volumes:
+      - grafana_data:/var/lib/grafana
     build:
       context: ./grafana
     expose:
@@ -199,6 +203,8 @@ services:
   influxdb:
     image: influxdb:1.8-alpine
     container_name: sawtooth-stats-influxdb
+    volumes:
+      - influxdb_data:/var/lib/influxdb
     environment:
       - INFLUXDB_DB=metrics
       - INFLUXDB_HTTP_AUTH_ENABLED=true
