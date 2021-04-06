@@ -15,7 +15,6 @@ export default function Block({ block_num, index, block_hash, previous_block_has
             <TableCell align="center">{table}</TableCell>
             <TableCell align="center">{data}</TableCell>
             <TableCell align="center">{host}</TableCell>
-            <TableCell align="center">{blockchain_host}</TableCell>
             <TableCell align="center">{application_time}</TableCell>
             <TableCell align="center">{blockchain_time}</TableCell>
             <Modal
@@ -47,8 +46,6 @@ export default function Block({ block_num, index, block_hash, previous_block_has
                 <Box fontWeight="fontWeightRegular" m={1}>{nonce}</Box>
                 <Box fontWeight="fontWeightBold" m={1}>Server</Box>
                 <Box fontWeight="fontWeightRegular" m={1}>{host}</Box>
-                <Box fontWeight="fontWeightBold" m={1}>Blockchain host</Box>
-                <Box fontWeight="fontWeightRegular" m={1}>{blockchain_host}</Box>
                 <Box fontWeight="fontWeightBold" m={1}>Table</Box>
                 <Box fontWeight="fontWeightRegular" m={1}>{table}</Box>
                 <Box fontWeight="fontWeightBold" m={1}>Transaction</Box>

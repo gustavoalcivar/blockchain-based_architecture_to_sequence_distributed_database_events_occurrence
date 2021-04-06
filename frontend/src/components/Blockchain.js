@@ -18,7 +18,6 @@ export default function Blockchain() {
                         <TableCell align="center"><Box fontWeight="fontWeightBold" m={1}>Table</Box></TableCell>
                         <TableCell align="center"><Box fontWeight="fontWeightBold" m={1}>Data</Box></TableCell>
                         <TableCell align="center"><Box fontWeight="fontWeightBold" m={1}>Server</Box></TableCell>
-                        <TableCell align="center"><Box fontWeight="fontWeightBold" m={1}>Blockchain host</Box></TableCell>
                         <TableCell align="center"><Box fontWeight="fontWeightBold" m={1}>Application time</Box></TableCell>
                         <TableCell align="center"><Box fontWeight="fontWeightBold" m={1}>Blockchain time</Box></TableCell>
                     </TableRow>

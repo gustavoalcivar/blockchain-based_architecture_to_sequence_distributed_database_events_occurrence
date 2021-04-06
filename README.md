@@ -1,6 +1,11 @@
 # vagrant_docker_swarm
 
-Puertos habilitados GCP: 1433,80,4000,3000
+Puertos habilitados GCP:
+1433 -> SQL Server
+80 -> http - nginx
+4000 -> client api
+3000 -> Grafana
+8086 -> Influxdb
 
 docker-compose -f $HOME/blockchain/docker/docker-compose-0.yml logs --tail=30 --follow
 docker-compose -f $HOME/blockchain/docker/docker-compose-1.yml logs --tail=30 --follow
