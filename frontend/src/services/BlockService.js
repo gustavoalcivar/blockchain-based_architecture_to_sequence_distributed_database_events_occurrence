@@ -14,11 +14,12 @@ export default async function getBlocks() {
                         delete jsonData["database"];
                         delete jsonData["table"];
                         delete jsonData["transaction"];
-                        delete jsonData["user"];
-                        delete jsonData["host"];
+                        delete jsonData["database_user"];
+                        delete jsonData["client_host"];
                         delete jsonData["datetime"];
                         delete jsonData["unixDatetime"];
                         delete jsonData["blockchain_host"];
+                        delete jsonData["database_host"];
                         let data = JSON.stringify(jsonData);
                         let trx = {
                             id: transaction.id,
@@ -30,9 +31,11 @@ export default async function getBlocks() {
                             payload: JSON.stringify(transaction.payload),
                             table: transaction.payload.table,
                             transaction: transaction.payload.transaction,
+                            application_user: transaction.payload.application_user,
                             data: data,
-                            host: transaction.payload.host,
+                            client_host: transaction.payload.client_host,
                             blockchain_host: transaction.payload.blockchain_host,
+                            database_host: transaction.payload.database_host,
                             application_time: transaction.payload.application_time,
                             blockchain_time: transaction.payload.datetime,
                             unixDatetime: transaction.payload.unixDatetime

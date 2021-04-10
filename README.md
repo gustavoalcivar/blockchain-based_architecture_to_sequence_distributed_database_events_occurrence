@@ -80,3 +80,36 @@ https://blog.maskalik.com/sql-server-service-broker/scalable-webservice-calls-fr
 https://www.sqlshack.com/using-the-sql-server-service-broker-for-asynchronous-processing/
 
 https://sqa.stackexchange.com/questions/46305/jmeter-how-do-i-run-parallel-jdbc-requests-in-jmeter
+
+
+# Scripts jmeter
+
+insert
+------------------------------------------------------------------------------------------
+```
+EXEC sys.sp_set_session_context @key = N'application_time', @value = '${__time(yyy-MM-dd HH:mm:ss.SSS,)}';  
+EXEC sys.sp_set_session_context @key = N'application_user', @value = '${__RandomString(5,ABCDEFGHIJKLMNOPQRSTUVWXYZ,)}'; 
+
+insert into transacciones(id_cuenta_bancaria, id_tipo_transaccion, monto) values (${__Random(1,2,)},${__Random(1,2,)},${__Random(1,9999,)})
+```
+
+update
+------------------------------------------------------------------------------------------
+```
+EXEC sys.sp_set_session_context @key = N'application_time', @value = '${__time(yyy-MM-dd HH:mm:ss.SSS,)}';  
+EXEC sys.sp_set_session_context @key = N'application_user', @value = '${__RandomString(5,ABCDEFGHIJKLMNOPQRSTUVWXYZ,)}'; 
+
+update cuentas_bancarias set saldo=${__Random(1,9999,)} where id=${__Random(1,2,)}
+```
+
+delete
+------------------------------------------------------------------------------------------
+```
+EXEC sys.sp_set_session_context @key = N'application_time', @value = '${__time(yyy-MM-dd HH:mm:ss.SSS,)}';  
+EXEC sys.sp_set_session_context @key = N'application_user', @value = '${__RandomString(5,ABCDEFGHIJKLMNOPQRSTUVWXYZ,)}'; 
+
+declare @id_borrar int
+select @id_borrar = min(id) from transacciones
+if @id_borrar > 0
+delete transacciones where id = @id_borrar
+```

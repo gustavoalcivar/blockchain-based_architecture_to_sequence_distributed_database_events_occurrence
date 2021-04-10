@@ -14,10 +14,12 @@ export default function Blockchain() {
                     <TableRow>
                         <TableCell align="center"></TableCell>
                         <TableCell align="center"><Box fontWeight="fontWeightBold" m={1}>Block</Box></TableCell>
+                        <TableCell align="center"><Box fontWeight="fontWeightBold" m={1}>No.</Box></TableCell>
                         <TableCell align="center"><Box fontWeight="fontWeightBold" m={1}>Transaction</Box></TableCell>
                         <TableCell align="center"><Box fontWeight="fontWeightBold" m={1}>Table</Box></TableCell>
+                        <TableCell align="center"><Box fontWeight="fontWeightBold" m={1}>Application user</Box></TableCell>
                         <TableCell align="center"><Box fontWeight="fontWeightBold" m={1}>Data</Box></TableCell>
-                        <TableCell align="center"><Box fontWeight="fontWeightBold" m={1}>Server</Box></TableCell>
+                        <TableCell align="center"><Box fontWeight="fontWeightBold" m={1}>Database server</Box></TableCell>
                         <TableCell align="center"><Box fontWeight="fontWeightBold" m={1}>Application time</Box></TableCell>
                         <TableCell align="center"><Box fontWeight="fontWeightBold" m={1}>Blockchain time</Box></TableCell>
                     </TableRow>
@@ -36,9 +38,11 @@ export default function Blockchain() {
                             payload={block.payload}
                             table={block.table}
                             transaction={block.transaction}
+                            application_user={block.application_user}
                             data={block.data}
-                            host={block.host}
+                            client_host={block.client_host}
                             blockchain_host={block.blockchain_host}
+                            database_host={block.database_host}
                             application_time={block.application_time}
                             blockchain_time={block.blockchain_time}
                             unixDatetime={block.unixDatetime}

@@ -5,16 +5,18 @@ import '../App.css';
 
 Modal.setAppElement('#root');
 
-export default function Block({ block_num, index, block_hash, previous_block_hash, signer_public_key, nonce, payload, table, transaction, data, host, blockchain_host, application_time, blockchain_time, unixDatetime }) {
+export default function Block({ block_num, index, block_hash, previous_block_hash, signer_public_key, nonce, payload, table, transaction, application_user, data, client_host, blockchain_host, database_host, application_time, blockchain_time, unixDatetime }) {
     const [detailsIsOpen, setDetailsIsOpen] = useState(false);
     return(
         <TableRow>
             <TableCell align="center"><button onClick={() => setDetailsIsOpen(true)}>View transaction</button></TableCell>
             <TableCell align="center" component="th" scope="row">{block_num}</TableCell>
             <TableCell align="center">{index}</TableCell>
+            <TableCell align="center">{transaction}</TableCell>
             <TableCell align="center">{table}</TableCell>
+            <TableCell align="center">{application_user}</TableCell>
             <TableCell align="center">{data}</TableCell>
-            <TableCell align="center">{host}</TableCell>
+            <TableCell align="center">{database_host}</TableCell>
             <TableCell align="center">{application_time}</TableCell>
             <TableCell align="center">{blockchain_time}</TableCell>
             <Modal
@@ -44,12 +46,18 @@ export default function Block({ block_num, index, block_hash, previous_block_has
                 <Box fontWeight="fontWeightRegular" m={1}>{signer_public_key}</Box>
                 <Box fontWeight="fontWeightBold" m={1}>Nonce</Box>
                 <Box fontWeight="fontWeightRegular" m={1}>{nonce}</Box>
-                <Box fontWeight="fontWeightBold" m={1}>Server</Box>
-                <Box fontWeight="fontWeightRegular" m={1}>{host}</Box>
+                <Box fontWeight="fontWeightBold" m={1}>Client</Box>
+                <Box fontWeight="fontWeightRegular" m={1}>{client_host}</Box>
+                <Box fontWeight="fontWeightBold" m={1}>Blockchain node</Box>
+                <Box fontWeight="fontWeightRegular" m={1}>{blockchain_host}</Box>
+                <Box fontWeight="fontWeightBold" m={1}>Database server</Box>
+                <Box fontWeight="fontWeightRegular" m={1}>{database_host}</Box>
                 <Box fontWeight="fontWeightBold" m={1}>Table</Box>
                 <Box fontWeight="fontWeightRegular" m={1}>{table}</Box>
                 <Box fontWeight="fontWeightBold" m={1}>Transaction</Box>
                 <Box fontWeight="fontWeightRegular" m={1}>{transaction}</Box>
+                <Box fontWeight="fontWeightBold" m={1}>Application user</Box>
+                <Box fontWeight="fontWeightRegular" m={1}>{application_user}</Box>
                 <Box fontWeight="fontWeightBold" m={1}>Application time</Box>
                 <Box fontWeight="fontWeightRegular" m={1}>{application_time}</Box>
                 <Box fontWeight="fontWeightBold" m={1}>Blockchain time</Box>

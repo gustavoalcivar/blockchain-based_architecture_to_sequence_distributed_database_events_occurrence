@@ -2,7 +2,7 @@ fs = require("fs");
 const {
 	schema,
 	database,
-	parametrization
+	tables
 } = require("./config");
 
 const requestTypeMessage = "http://audit_blockchail/RequestMessage";
@@ -77,101 +77,17 @@ CREATE EVENT NOTIFICATION EventNotificationTargetQueue
   FOR QUEUE_ACTIVATION
   TO SERVICE 'ExternalActivatorService', 'current database';
 `;
-parametrization.forEach((table) => {
+tables.forEach((table) => {
   data =
     data +
     `
-    IF not exists(SELECT 1 FROM INFORMATION_SCHEMA.columns WHERE table_name='${table.table}' AND column_name='application_time')
-    BEGIN
-      ALTER TABLE ${table.table} ADD application_time varchar(23)
-    END
-  IF not exists(SELECT 1 FROM INFORMATION_SCHEMA.columns WHERE table_name='${table.table}' AND column_name='application_user')
-    BEGIN
-      ALTER TABLE ${table.table} ADD application_user varchar(255)
-    END
-    `;
-
-  let spParams = "";
-  let spColumns = "";
-  let spValues = "";
-  let spUpdate = "";
-  let idColumn = "";
-  let idType = "";
-  table.columns.forEach((item) => {
-    if(item.split("|").length == 2) {
-      spParams = spParams + `@${item.split("|")[0]} ${item.split("|")[1]},`;
-      spColumns = spColumns + `${item.split("|")[0]},`;
-      spValues = spValues + `@${item.split("|")[0]},`;
-      spUpdate = spUpdate + `${item.split("|")[0]}=@${item.split("|")[0]},`;
-    } else if(item.split("|").length == 3) {
-      idColumn = `${item.split("|")[0]}`;
-      idType = item.split("|")[1];
-    }
-  });
-
-  data =
-    data +
-    `
-    IF OBJECT_ID ('insert_${table.table}_store_procedure', 'P') IS NOT NULL
-    BEGIN
-    DROP PROCEDURE ${schema}.insert_${table.table}_store_procedure
-    END
-    GO
-    CREATE PROCEDURE ${schema}.insert_${table.table}_store_procedure(
-    ${spParams}
-    @application_time varchar(23),
-    @application_user varchar(255)
-    )
-    AS
-     BEGIN
-      insert into ${table.table}(${spColumns}application_time,application_user) values(${spValues}@application_time,@application_user)
-     END
-     GO
-    
-     IF OBJECT_ID ('update_${table.table}_store_procedure', 'P') IS NOT NULL
-     BEGIN
-     DROP PROCEDURE ${schema}.update_${table.table}_store_procedure
-     END
-     GO
-     CREATE PROCEDURE ${schema}.update_${table.table}_store_procedure(
-      @${idColumn} ${idType},
-      ${spParams}
-      @application_time varchar(23),
-      @application_user varchar(255)
-     )
-     AS
-      BEGIN
-       update ${table.table} set ${spUpdate.substring(0, spUpdate.length)}application_time=@application_time,application_user=@application_user where ${idColumn}=@${idColumn}
-      END
-      GO
-
-      IF OBJECT_ID ('delete_${table.table}_store_procedure', 'P') IS NOT NULL
-      BEGIN
-      DROP PROCEDURE ${schema}.delete_${table.table}_store_procedure
-      END
-      GO
-      CREATE PROCEDURE ${schema}.delete_${table.table}_store_procedure(
-       @${idColumn} ${idType},
-       @application_time varchar(23),
-       @application_user varchar(255)
-      )
-      AS
-       BEGIN
-        delete ${table.table} where ${idColumn}=@${idColumn}
-       END
-       GO
-  `;
-
-  data =
-    data +
-    `
-	IF OBJECT_ID ('tr_insert_${table.table}', 'TR') IS NOT NULL
+	IF OBJECT_ID ('tr_insert_${table}', 'TR') IS NOT NULL
 	BEGIN
-	DROP TRIGGER ${schema}.tr_insert_${table.table}
+	DROP TRIGGER ${schema}.tr_insert_${table}
 	END
 	GO
-	CREATE TRIGGER ${schema}.tr_insert_${table.table}
-	ON ${schema}.${table.table} FOR INSERT AS
+	CREATE TRIGGER ${schema}.tr_insert_${table}
+	ON ${schema}.${table} FOR INSERT AS
 	 BEGIN
     DECLARE
     @ch UNIQUEIDENTIFIER,
@@ -184,10 +100,14 @@ parametrization.forEach((table) => {
       ON CONTRACT [${contract}]
       WITH ENCRYPTION = OFF;
 
-			set @data = (SELECT '${database}' as 'database',
-      '${table.table}' as 'table',
-      'INSERT' as 'transaction',
-      REPLACE(SYSTEM_USER,'\\','_') as 'user',
+			set @data = (SELECT '${database}' as '___database___',
+      '${table}' as '___table___',
+      'INSERT' as '___transaction___',
+      REPLACE(SYSTEM_USER,'\\','_') as '___database_user___',
+      SESSION_CONTEXT(N'application_time') as '___application_time___',
+      SESSION_CONTEXT(N'application_user') as '___application_user___',
+      HOST_NAME() as '___client_host___',
+      @@SERVERNAME as '___database_host___',
       * FROM inserted FOR XML AUTO, ELEMENTS);
 
       ;SEND ON CONVERSATION @ch
@@ -196,13 +116,13 @@ parametrization.forEach((table) => {
     end
   go
 
-  IF OBJECT_ID ('tr_update_${table.table}', 'TR') IS NOT NULL
+  IF OBJECT_ID ('tr_update_${table}', 'TR') IS NOT NULL
 	BEGIN
-	DROP TRIGGER ${schema}.tr_update_${table.table}
+	DROP TRIGGER ${schema}.tr_update_${table}
 	END
 	GO
-	CREATE TRIGGER ${schema}.tr_update_${table.table}
-	ON ${schema}.${table.table} FOR UPDATE AS
+	CREATE TRIGGER ${schema}.tr_update_${table}
+	ON ${schema}.${table} FOR UPDATE AS
 	 BEGIN
     DECLARE
     @ch UNIQUEIDENTIFIER,
@@ -215,10 +135,14 @@ parametrization.forEach((table) => {
       ON CONTRACT [${contract}]
       WITH ENCRYPTION = OFF;
 
-			set @data = (SELECT '${database}' as 'database',
-      '${table.table}' as 'table',
-      'UPDATE' as 'transaction',
-      REPLACE(SYSTEM_USER,'\\','_') as 'user',
+			set @data = (SELECT '${database}' as '___database___',
+      '${table}' as '___table___',
+      'UPDATE' as '___transaction___',
+      REPLACE(SYSTEM_USER,'\\','_') as '___database_user___',
+      SESSION_CONTEXT(N'application_time') as '___application_time___',
+      SESSION_CONTEXT(N'application_user') as '___application_user___',
+      HOST_NAME() as '___client_host___',
+      @@SERVERNAME as '___database_host___',
       * FROM deleted, inserted FOR XML AUTO, ELEMENTS);
 
       ;SEND ON CONVERSATION @ch
@@ -227,13 +151,13 @@ parametrization.forEach((table) => {
     end
   go
 
-  IF OBJECT_ID ('tr_delete_${table.table}', 'TR') IS NOT NULL
+  IF OBJECT_ID ('tr_delete_${table}', 'TR') IS NOT NULL
 	BEGIN
-	DROP TRIGGER ${schema}.tr_delete_${table.table}
+	DROP TRIGGER ${schema}.tr_delete_${table}
 	END
 	GO
-	CREATE TRIGGER ${schema}.tr_delete_${table.table}
-	ON ${schema}.${table.table} FOR DELETE AS
+	CREATE TRIGGER ${schema}.tr_delete_${table}
+	ON ${schema}.${table} FOR DELETE AS
 	 BEGIN
     DECLARE
     @ch UNIQUEIDENTIFIER,
@@ -246,10 +170,14 @@ parametrization.forEach((table) => {
       ON CONTRACT [${contract}]
       WITH ENCRYPTION = OFF;
 
-			set @data = (SELECT '${database}' as 'database',
-      '${table.table}' as 'table',
-      'DELETE' as 'transaction',
-      REPLACE(SYSTEM_USER,'\\','_') as 'user',
+			set @data = (SELECT '${database}' as '___database___',
+      '${table}' as '___table___',
+      'DELETE' as '___transaction___',
+      REPLACE(SYSTEM_USER,'\\','_') as '___database_user___',
+      SESSION_CONTEXT(N'application_time') as '___application_time___',
+      SESSION_CONTEXT(N'application_user') as '___application_user___',
+      HOST_NAME() as '___client_host___',
+      @@SERVERNAME as '___database_host___',
       * FROM deleted FOR XML AUTO, ELEMENTS);
 
       ;SEND ON CONVERSATION @ch
