@@ -17,7 +17,7 @@ tail -f $HOME/blockchain/interface/interface.log
 EN EL NODO 0
 ---------------------------------------------------------------------------------------
 sudo ufw disable
-sudo hostnamectl set-hostname node0
+sudo hostnamectl set-hostname sqlserver0
 sudo apt-get update
 sudo apt-get install -y nfs-kernel-server
 sudo nano /etc/exports
@@ -34,7 +34,7 @@ sudo systemctl start nfs-kernel-server
 EN LOS DEMÁS NODOS
 ----------------------------------------------------------------------------------------
 sudo ufw disable
-sudo hostnamectl set-hostname node0 | sudo hostnamectl set-hostname node1 | sudo hostnamectl set-hostname node2 | sudo hostnamectl set-hostname node3
+sudo hostnamectl set-hostname sqlserver1 | sudo hostnamectl set-hostname sqlserver2 | sudo hostnamectl set-hostname sqlserver3
 sudo apt-get update
 sudo apt-get install -y nfs-common
 mkdir -p /ruta/para/contenido/carpeta/compartida/
@@ -73,6 +73,15 @@ docker-compose -f docker-compose-dev.yml up --force
 NOTAS
 ------------------------------------------------------------------------------------------
 Habilitar conexiones externas y login mediante usuario y contraseña en sql server
+
+CAMBIAR EL NOMBRE DEL HOST EN SQL SERVER
+------------------------------------------------------------------------------------------
+select @@SERVERNAME
+
+EXEC sp_dropserver 'node0';  
+GO  
+EXEC sp_addserver 'sqlserver0', local;  
+GO
 
 
 https://blog.maskalik.com/sql-server-service-broker/scalable-webservice-calls-from-database/

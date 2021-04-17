@@ -11,9 +11,9 @@ const service1 = new Sqlssb({
   queue: "TargetQueue"
 })
 
-service1.on("http://audit_blockchail/RequestMessage", ctx => {
+service1.on("http://audit_blockchail/RequestMessage", async ctx => {
   // La interfaz se conecta al servicio que expone el cliente de blockchain
-  post(`http://localhost:4000/saveAudit/`, xmlToJson(ctx.messageBody), {
+  await post(`http://localhost:4000/saveAudit/`, xmlToJson(ctx.messageBody), {
     headers: { "Content-Type": "application/json" },
   })
     .then((response) => console.log(response.data))
