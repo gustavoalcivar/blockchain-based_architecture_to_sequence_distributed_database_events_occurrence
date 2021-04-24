@@ -1,5 +1,5 @@
 const Sqlssb = require("sqlssb");
-const { post } = require("axios");
+const fetch = require("node-fetch");
 const { xmlToJson } = require("./functions");
 
 const service1 = new Sqlssb({
@@ -13,12 +13,13 @@ const service1 = new Sqlssb({
 
 service1.on("http://audit_blockchail/RequestMessage", async ctx => {
   // La interfaz se conecta al servicio que expone el cliente de blockchain
-  await post(`http://localhost:4000/saveAudit/`, xmlToJson(ctx.messageBody), {
-    headers: { "Content-Type": "application/json" },
-  })
-    .then((response) => console.log(response.data))
-    .catch((err) => console.log("err", err));
+  let res = await fetch("http://localhost:4000/saveAudit/", {
+    method: "post",
+    body: JSON.stringify(xmlToJson(ctx.messageBody)),
+    headers: { "Content-Type": "application/json" }
   });
+  console.log(await res.json());
+});
  
 service1.start({ //default settings:
   timeout: 5000, //5 seconds

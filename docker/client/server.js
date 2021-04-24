@@ -1,8 +1,8 @@
 const { createContext, CryptoFactory } = require("sawtooth-sdk/signing");
 const { encode } = require("cbor");
 const { protobuf } = require("sawtooth-sdk");
-const { post, get } = require("axios");
 const { createHash } = require("crypto");
+const fetch = require("node-fetch");
 
 const context = createContext("secp256k1");
 const privateKey = context.newRandomPrivateKey();
@@ -11,7 +11,7 @@ const signer = new CryptoFactory(context).newSigner(privateKey);
 const _hash = (x) =>
   createHash("sha512").update(x).digest("hex").toLowerCase().substring(0, 64);
 
-const sendRequest = async (payload) => {
+const sendRequest = async payload => {
   const payloadBytes = encode(JSON.stringify(payload));
   const transactionHeaderBytes = protobuf.TransactionHeader.encode({
     familyName: process.env.TP_FAMILY,
@@ -52,25 +52,25 @@ const sendRequest = async (payload) => {
     batches: [batch],
   }).finish();
 
-  return await post(`http://rest-api-${process.env.NODE}:8008/batches`, batchListBytes, {
-    headers: { "Content-Type": "application/octet-stream" },
-  });
+  let data;
+  do {
+    const res = await fetch(`http://rest-api-${process.env.NODE}:8008/batches`, {
+      method: "post",
+      body: batchListBytes,
+      headers: { "Content-Type": "application/octet-stream" }
+    });
+    data = await res.json();
+  } while(data.error != undefined);
+  return data;
+}
+
+const saveAudit = async data => {
+  return await sendRequest(data);
 };
 
-const saveAudit = async (data) => {
-  try {
-    return await sendRequest(data);
-  } catch (err) {
-    return { err };
-  }
-};
-
-const viewBlocks = async() => {
-  try {
-    return await get(`http://rest-api-${process.env.NODE}:8008/blocks`);
-  } catch (err) {
-    return { err };
-  }
+const viewBlocks = async () => {
+  const res = await fetch(`http://rest-api-${process.env.NODE}:8008/blocks`);
+  return await res.json();
 }
 
 module.exports = {saveAudit, viewBlocks};

@@ -90,6 +90,8 @@ https://www.sqlshack.com/using-the-sql-server-service-broker-for-asynchronous-pr
 
 https://sqa.stackexchange.com/questions/46305/jmeter-how-do-i-run-parallel-jdbc-requests-in-jmeter
 
+https://www.sqlshack.com/es/varias-tecnicas-para-auditar-bases-de-datos-de-sql-server/
+
 
 # Scripts jmeter
 

@@ -10,7 +10,8 @@
   "author": "Gustavo Alcívar",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.21.1",
-    "sqlssb": "0.0.2"
+    "node-fetch": "^2.6.1",
+    "sqlssb": "0.0.2",
+    "unix-time": "^1.0.1"
   }
 }
