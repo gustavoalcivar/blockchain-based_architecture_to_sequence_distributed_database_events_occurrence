@@ -91,7 +91,8 @@ tables.forEach((table) => {
 	 BEGIN
     DECLARE
     @ch UNIQUEIDENTIFIER,
-		@data nvarchar(4000);
+		@data nvarchar(4000),
+    @database_time datetime;
 
 		BEGIN TRANSACTION;
     BEGIN DIALOG CONVERSATION @ch
@@ -100,10 +101,12 @@ tables.forEach((table) => {
       ON CONTRACT [${contract}]
       WITH ENCRYPTION = OFF;
 
-			set @data = (SELECT '${database}' as '___database___',
+			select @database_time = getdate();
+      set @data = (SELECT '${database}' as '___database___',
       '${table}' as '___table___',
       'INSERT' as '___transaction___',
       REPLACE(SYSTEM_USER,'\\','_') as '___database_user___',
+      @database_time as '___database_time___',
       SESSION_CONTEXT(N'application_time') as '___application_time___',
       SESSION_CONTEXT(N'application_user') as '___application_user___',
       HOST_NAME() as '___client_host___',
@@ -126,7 +129,8 @@ tables.forEach((table) => {
 	 BEGIN
     DECLARE
     @ch UNIQUEIDENTIFIER,
-		@data nvarchar(4000);
+		@data nvarchar(4000),
+    @database_time datetime;
 
 		BEGIN TRANSACTION;
     BEGIN DIALOG CONVERSATION @ch
@@ -135,10 +139,12 @@ tables.forEach((table) => {
       ON CONTRACT [${contract}]
       WITH ENCRYPTION = OFF;
 
-			set @data = (SELECT '${database}' as '___database___',
+			select @database_time = getdate();
+      set @data = (SELECT '${database}' as '___database___',
       '${table}' as '___table___',
       'UPDATE' as '___transaction___',
       REPLACE(SYSTEM_USER,'\\','_') as '___database_user___',
+      @database_time as '___database_time___',
       SESSION_CONTEXT(N'application_time') as '___application_time___',
       SESSION_CONTEXT(N'application_user') as '___application_user___',
       HOST_NAME() as '___client_host___',
@@ -161,7 +167,8 @@ tables.forEach((table) => {
 	 BEGIN
     DECLARE
     @ch UNIQUEIDENTIFIER,
-		@data nvarchar(4000);
+		@data nvarchar(4000),
+    @database_time datetime;
 
 		BEGIN TRANSACTION;
     BEGIN DIALOG CONVERSATION @ch
@@ -170,10 +177,12 @@ tables.forEach((table) => {
       ON CONTRACT [${contract}]
       WITH ENCRYPTION = OFF;
 
-			set @data = (SELECT '${database}' as '___database___',
+			select @database_time = getdate();
+      set @data = (SELECT '${database}' as '___database___',
       '${table}' as '___table___',
       'DELETE' as '___transaction___',
       REPLACE(SYSTEM_USER,'\\','_') as '___database_user___',
+      @database_time as '___database_time___',
       SESSION_CONTEXT(N'application_time') as '___application_time___',
       SESSION_CONTEXT(N'application_user') as '___application_user___',
       HOST_NAME() as '___client_host___',

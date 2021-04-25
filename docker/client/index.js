@@ -2,6 +2,7 @@ const {saveAudit, viewBlocks} = require("./server.js");
 const express = require("express");
 const app = express();
 const { hostname } = require("os");
+const unixTime = require("unix-time");
 
 app.use(express.urlencoded());
 
@@ -19,6 +20,9 @@ app.use((req, res, next) => {
 app.post("/saveAudit/", async (req, res) => {
   let data0 = req.body;
   data0.blockchain_host = hostname();
+  let today = new Date();
+  data0.datetime = `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, "00")}-${today.getDate().toString().padStart(2, "00")} ${today.getHours().toString().padStart(2, "00")}:${today.getMinutes().toString().padStart(2, "00")}:${today.getSeconds().toString().padStart(2, "00")}.${today.getMilliseconds().toString().padStart(3, "000")}`;
+  data0.unixDatetime = unixTime(new Date()).toString();
   res.json(await saveAudit(data0));
 });
 

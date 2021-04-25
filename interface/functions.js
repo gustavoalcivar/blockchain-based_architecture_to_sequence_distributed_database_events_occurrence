@@ -1,5 +1,3 @@
-const unixTime = require("unix-time");
-
 const countInstances = (string, Word) => string.split(Word).length - 1;
 
 const getPosition = (string, subString, index) => string.split(subString, index).join(subString).length;
@@ -31,8 +29,9 @@ const xmlToJson = (xml) => {
                 nodo1 = nodo;
             }
         } else {
-            if(nodo === '___database___' || nodo === '___table___' || nodo === '___transaction___' || nodo === '___client_host___' ||
-            nodo === '___database_host___' || nodo === '___database_user___' || nodo === '___application_time___' || nodo === '___application_user___')
+            if(nodo === '___database___' || nodo === '___table___' || nodo === '___transaction___'||
+            nodo === '___client_host___' || nodo === '___database_host___' || nodo === '___database_user___' ||
+            nodo === '___database_time___' || nodo === '___application_time___' || nodo === '___application_user___')
             result[nodo.replace('___', '').replace('___', '')] = valor;
             else result0[nodo] = valor;
         }
@@ -46,9 +45,6 @@ const xmlToJson = (xml) => {
         result1[nodo] = valor;
     }
     if(nodo1 !== '') result[nodo1] = result1;
-    let today = new Date();
-    result.datetime = `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, "00")}-${today.getDate().toString().padStart(2, "00")} ${today.getHours().toString().padStart(2, "00")}:${today.getMinutes().toString().padStart(2, "00")}:${today.getSeconds().toString().padStart(2, "00")}.${today.getMilliseconds().toString().padStart(3, "000")}`;
-    result.unixDatetime = unixTime(new Date()).toString();
     return result;
 }
 

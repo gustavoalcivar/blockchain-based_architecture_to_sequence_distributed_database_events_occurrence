@@ -18,7 +18,7 @@
           <boolProp name="LoopController.continue_forever">false</boolProp>
           <stringProp name="LoopController.loops">1</stringProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">3</stringProp>
+        <stringProp name="ThreadGroup.num_threads">250</stringProp>
         <stringProp name="ThreadGroup.ramp_time">1</stringProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
@@ -26,6 +26,61 @@
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
       <hashTree>
+        <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+          <collectionProp name="Arguments.arguments">
+            <elementProp name="user1" elementType="Argument">
+              <stringProp name="Argument.name">user1</stringProp>
+              <stringProp name="Argument.value">user1</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="user2" elementType="Argument">
+              <stringProp name="Argument.name">user2</stringProp>
+              <stringProp name="Argument.value">user2</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="user3" elementType="Argument">
+              <stringProp name="Argument.name">user3</stringProp>
+              <stringProp name="Argument.value">user3</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="user4" elementType="Argument">
+              <stringProp name="Argument.name">user4</stringProp>
+              <stringProp name="Argument.value">user4</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="user5" elementType="Argument">
+              <stringProp name="Argument.name">user5</stringProp>
+              <stringProp name="Argument.value">user5</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="user6" elementType="Argument">
+              <stringProp name="Argument.name">user6</stringProp>
+              <stringProp name="Argument.value">user6</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="user7" elementType="Argument">
+              <stringProp name="Argument.name">user7</stringProp>
+              <stringProp name="Argument.value">user7</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="user8" elementType="Argument">
+              <stringProp name="Argument.name">user8</stringProp>
+              <stringProp name="Argument.value">user8</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="user9" elementType="Argument">
+              <stringProp name="Argument.name">user9</stringProp>
+              <stringProp name="Argument.value">user9</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="user10" elementType="Argument">
+              <stringProp name="Argument.name">user10</stringProp>
+              <stringProp name="Argument.value">user10</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+          </collectionProp>
+        </Arguments>
+        <hashTree/>
         <JDBCDataSource guiclass="TestBeanGUI" testclass="JDBCDataSource" testname="JDBC Connection Configuration 0" enabled="true">
           <boolProp name="autocommit">true</boolProp>
           <stringProp name="checkQuery"></stringProp>
@@ -47,8 +102,8 @@
         <hashTree/>
         <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="JDBC Request 0" enabled="true">
           <stringProp name="dataSource">Test_Pool_0</stringProp>
-          <stringProp name="query">EXEC sys.sp_set_session_context @key = N&apos;application_time&apos;, @value = &apos;${__time(yyy-MM-dd HH:mm:ss.SSS,)}&apos;;  
-EXEC sys.sp_set_session_context @key = N&apos;application_user&apos;, @value = &apos;${__RandomString(5,ABCDEFGHIJKLMNOPQRSTUVWXYZ,)}&apos;; 
+          <stringProp name="query">EXEC sys.sp_set_session_context @key = N&apos;application_time&apos;, @value = &apos;${__time(yyy-MM-dd HH:mm:ss.SSS,)}&apos;;
+EXEC sys.sp_set_session_context @key = N&apos;application_user&apos;, @value = &apos;${__V(user${__Random(1,10,)})}&apos;;
 
 insert into transacciones(id_cuenta_bancaria, id_tipo_transaccion, monto) values (${__Random(1,2,)},${__Random(1,2,)},${__Random(1,9999,)})
 </stringProp>

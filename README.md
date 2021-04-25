@@ -98,8 +98,8 @@ https://www.sqlshack.com/es/varias-tecnicas-para-auditar-bases-de-datos-de-sql-s
 insert
 ------------------------------------------------------------------------------------------
 ```
-EXEC sys.sp_set_session_context @key = N'application_time', @value = '${__time(yyy-MM-dd HH:mm:ss.SSS,)}';  
-EXEC sys.sp_set_session_context @key = N'application_user', @value = '${__RandomString(5,ABCDEFGHIJKLMNOPQRSTUVWXYZ,)}'; 
+EXEC sys.sp_set_session_context @key = N'application_time', @value = '${__time(yyy-MM-dd HH:mm:ss.SSS,)}';
+EXEC sys.sp_set_session_context @key = N'application_user', @value = '${__V(user${__Random(1,10,)})}';
 
 insert into transacciones(id_cuenta_bancaria, id_tipo_transaccion, monto) values (${__Random(1,2,)},${__Random(1,2,)},${__Random(1,9999,)})
 ```
@@ -107,8 +107,8 @@ insert into transacciones(id_cuenta_bancaria, id_tipo_transaccion, monto) values
 update
 ------------------------------------------------------------------------------------------
 ```
-EXEC sys.sp_set_session_context @key = N'application_time', @value = '${__time(yyy-MM-dd HH:mm:ss.SSS,)}';  
-EXEC sys.sp_set_session_context @key = N'application_user', @value = '${__RandomString(5,ABCDEFGHIJKLMNOPQRSTUVWXYZ,)}'; 
+EXEC sys.sp_set_session_context @key = N'application_time', @value = '${__time(yyy-MM-dd HH:mm:ss.SSS,)}';
+EXEC sys.sp_set_session_context @key = N'application_user', @value = '${__V(user${__Random(1,10,)})}';
 
 update cuentas_bancarias set saldo=${__Random(1,9999,)} where id=${__Random(1,2,)}
 ```
@@ -116,8 +116,8 @@ update cuentas_bancarias set saldo=${__Random(1,9999,)} where id=${__Random(1,2,
 delete
 ------------------------------------------------------------------------------------------
 ```
-EXEC sys.sp_set_session_context @key = N'application_time', @value = '${__time(yyy-MM-dd HH:mm:ss.SSS,)}';  
-EXEC sys.sp_set_session_context @key = N'application_user', @value = '${__RandomString(5,ABCDEFGHIJKLMNOPQRSTUVWXYZ,)}'; 
+EXEC sys.sp_set_session_context @key = N'application_time', @value = '${__time(yyy-MM-dd HH:mm:ss.SSS,)}';
+EXEC sys.sp_set_session_context @key = N'application_user', @value = '${__V(user${__Random(1,10,)})}';
 
 declare @id_borrar int
 select @id_borrar = min(id) from transacciones

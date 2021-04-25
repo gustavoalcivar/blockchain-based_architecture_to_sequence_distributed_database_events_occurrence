@@ -12,6 +12,7 @@
     "cbor": "^5.1.0",
     "express": "^4.17.1",
     "node-fetch": "^2.6.1",
-    "sawtooth-sdk": "^1.0.5"
+    "sawtooth-sdk": "^1.0.5",
+    "unix-time": "^1.0.1"
   }
 }

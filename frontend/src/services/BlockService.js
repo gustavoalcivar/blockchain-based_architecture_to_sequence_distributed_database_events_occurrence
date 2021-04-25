@@ -9,6 +9,7 @@ export default async function getBlocks() {
                 block.batches.forEach(batch => {
                     batch.transactions.forEach(transaction => {
                         let jsonData = Object.assign({}, transaction.payload);
+                        delete jsonData["database_time"];
                         delete jsonData["application_time"];
                         delete jsonData["application_user"];
                         delete jsonData["database"];
@@ -20,7 +21,7 @@ export default async function getBlocks() {
                         delete jsonData["unixDatetime"];
                         delete jsonData["blockchain_host"];
                         delete jsonData["database_host"];
-                        let data = JSON.stringify(jsonData);
+                        let data = JSON.stringify(jsonData, null, 2);
                         let trx = {
                             id: transaction.id,
                             block_num: block.block_num,
@@ -37,6 +38,7 @@ export default async function getBlocks() {
                             blockchain_host: transaction.payload.blockchain_host,
                             database_host: transaction.payload.database_host,
                             application_time: transaction.payload.application_time,
+                            database_time: transaction.payload.database_time,
                             blockchain_time: transaction.payload.datetime,
                             unixDatetime: transaction.payload.unixDatetime
                         };
@@ -55,6 +57,6 @@ export default async function getBlocks() {
                 trxs.push(trx);
             }
         });
-        return trxs;
+        return trxs.sort((a, b) => (a.blockchain_time > b.blockchain_time) ? -1 : (b.blockchain_time > a.blockchain_time) ? 1 : 0);
     });
 }

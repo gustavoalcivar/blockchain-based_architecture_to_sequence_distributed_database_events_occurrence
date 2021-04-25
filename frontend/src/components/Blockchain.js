@@ -21,6 +21,7 @@ export default function Blockchain() {
                         <TableCell align="center"><Box fontWeight="fontWeightBold" m={1}>Data</Box></TableCell>
                         <TableCell align="center"><Box fontWeight="fontWeightBold" m={1}>Database server</Box></TableCell>
                         <TableCell align="center"><Box fontWeight="fontWeightBold" m={1}>Application time</Box></TableCell>
+                        <TableCell align="center"><Box fontWeight="fontWeightBold" m={1}>Database time</Box></TableCell>
                         <TableCell align="center"><Box fontWeight="fontWeightBold" m={1}>Blockchain time</Box></TableCell>
                     </TableRow>
                 </TableHead>
@@ -44,6 +45,7 @@ export default function Blockchain() {
                             blockchain_host={block.blockchain_host}
                             database_host={block.database_host}
                             application_time={block.application_time}
+                            database_time={block.database_time}
                             blockchain_time={block.blockchain_time}
                             unixDatetime={block.unixDatetime}
                         />

@@ -5,19 +5,20 @@ import '../App.css';
 
 Modal.setAppElement('#root');
 
-export default function Block({ block_num, index, block_hash, previous_block_hash, signer_public_key, nonce, payload, table, transaction, application_user, data, client_host, blockchain_host, database_host, application_time, blockchain_time, unixDatetime }) {
+export default function Block({ block_num, index, block_hash, previous_block_hash, signer_public_key, nonce, payload, table, transaction, application_user, data, client_host, blockchain_host, database_host, application_time, database_time, blockchain_time, unixDatetime }) {
     const [detailsIsOpen, setDetailsIsOpen] = useState(false);
     return(
         <TableRow>
             <TableCell align="center"><button onClick={() => setDetailsIsOpen(true)}>View transaction</button></TableCell>
-            <TableCell align="center" component="th" scope="row">{block_num}</TableCell>
+            <TableCell align="center">{block_num}</TableCell>
             <TableCell align="center">{index}</TableCell>
             <TableCell align="center">{transaction}</TableCell>
             <TableCell align="center">{table}</TableCell>
             <TableCell align="center">{application_user}</TableCell>
-            <TableCell align="center">{data}</TableCell>
+            <TableCell align="center"><Box width="150px" fontSize="11px">{data}</Box></TableCell>
             <TableCell align="center">{database_host}</TableCell>
             <TableCell align="center">{application_time}</TableCell>
+            <TableCell align="center">{database_time}</TableCell>
             <TableCell align="center">{blockchain_time}</TableCell>
             <Modal
             isOpen={detailsIsOpen}
@@ -60,6 +61,8 @@ export default function Block({ block_num, index, block_hash, previous_block_has
                 <Box fontWeight="fontWeightRegular" m={1}>{application_user}</Box>
                 <Box fontWeight="fontWeightBold" m={1}>Application time</Box>
                 <Box fontWeight="fontWeightRegular" m={1}>{application_time}</Box>
+                <Box fontWeight="fontWeightBold" m={1}>Database time</Box>
+                <Box fontWeight="fontWeightRegular" m={1}>{database_time}</Box>
                 <Box fontWeight="fontWeightBold" m={1}>Blockchain time</Box>
                 <Box fontWeight="fontWeightRegular" m={1}>{blockchain_time}</Box>
                 <Box fontWeight="fontWeightBold" m={1}>Unix time</Box>
