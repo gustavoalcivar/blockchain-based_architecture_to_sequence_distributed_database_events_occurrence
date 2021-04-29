@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "node-fetch": "^2.6.1",
-    "sqlssb": "0.0.2"
+    "sqlssb": "0.0.2",
+    "unix-time": "^1.0.1"
   }
 }

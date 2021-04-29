@@ -140,3 +140,22 @@ services:
       dockerfile: ../Dockerfile
     networks:
       - _network
+
+# --------=== blockchain interface ===--------
+
+  interface-2:
+    image: interface
+    container_name: interface-2
+    environment:
+      - NODE=2
+      - DATABASE_USER=SA
+      - DATABASE_PASSWORD=GaarGaar1234
+      - DATABASE_SERVER=10.142.0.4
+      - DATABASE_NAME=mybank
+    depends_on:
+      - client-2
+    build:
+      context: ./interface
+      dockerfile: ../Dockerfile
+    networks:
+      - _network

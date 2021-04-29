@@ -99,6 +99,23 @@ services:
       context: ./client
       dockerfile: ../Dockerfile
 
+# --------=== blockchain interface ===--------
+
+  interface-0:
+    image: interface
+    container_name: interface-0
+    environment:
+      - NODE=0
+      - DATABASE_USER=gaar
+      - DATABASE_PASSWORD=gaar
+      - DATABASE_SERVER=192.168.100.9
+      - DATABASE_NAME=mybank
+    depends_on:
+      - client-0
+    build:
+      context: ./interface
+      dockerfile: ../Dockerfile
+
 # --------=== Grafana ===--------
 
   sawtooth-stats-grafana:

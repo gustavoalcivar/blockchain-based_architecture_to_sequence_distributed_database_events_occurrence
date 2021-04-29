@@ -12,15 +12,4 @@ sudo usermod -aG docker $USER
 echo Install Docker Compose...
 sudo curl -L "https://github.com/docker/compose/releases/download/1.28.6/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
-echo Install Node...
-cd ~
-curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh
-sudo bash nodesource_setup.sh
-sudo apt-get install -y nodejs
-echo SETTING ENVIRONMENT VARIABLES
-echo 'export DATABASE_USER="SA"' >> ~/.bashrc
-echo 'export DATABASE_PASSWORD="password"' >> ~/.bashrc
-echo 'export DATABASE_SERVER="localhost"' >> ~/.bashrc
-echo 'export DATABASE_NAME="databasename"' >> ~/.bashrc
-source ~/.bashrc
 echo Finished...

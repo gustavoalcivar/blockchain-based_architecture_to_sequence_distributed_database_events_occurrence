@@ -1,3 +1,6 @@
+DROP DATABASE IF EXISTS mybank
+go
+
 CREATE DATABASE mybank
 go
 

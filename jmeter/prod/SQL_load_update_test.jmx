@@ -163,8 +163,7 @@
             <stringProp name="dataSource">Test_Pool_0</stringProp>
             <stringProp name="query">EXEC sys.sp_set_session_context @key = N&apos;application_time&apos;, @value = &apos;${__time(yyy-MM-dd HH:mm:ss.SSS,)}&apos;;
 EXEC sys.sp_set_session_context @key = N&apos;application_user&apos;, @value = &apos;${__V(user${__Random(1,10,)})}&apos;;
-
-update cuentas_bancarias set saldo=${__Random(1,9999,)} where id=${__Random(1,2,)}
+update cuentas_bancarias set saldo=${__Random(1,9999,)} where id=${__Random(1,2,)};
 </stringProp>
             <stringProp name="queryArguments"></stringProp>
             <stringProp name="queryArgumentsTypes"></stringProp>
@@ -180,8 +179,7 @@ update cuentas_bancarias set saldo=${__Random(1,9999,)} where id=${__Random(1,2,
             <stringProp name="dataSource">Test_Pool_1</stringProp>
             <stringProp name="query">EXEC sys.sp_set_session_context @key = N&apos;application_time&apos;, @value = &apos;${__time(yyy-MM-dd HH:mm:ss.SSS,)}&apos;;
 EXEC sys.sp_set_session_context @key = N&apos;application_user&apos;, @value = &apos;${__V(user${__Random(1,10,)})}&apos;;
-
-update cuentas_bancarias set saldo=${__Random(1,9999,)} where id=${__Random(1,2,)}
+update cuentas_bancarias set saldo=${__Random(1,9999,)} where id=${__Random(1,2,)};
 </stringProp>
             <stringProp name="queryArguments"></stringProp>
             <stringProp name="queryArgumentsTypes"></stringProp>
@@ -197,8 +195,7 @@ update cuentas_bancarias set saldo=${__Random(1,9999,)} where id=${__Random(1,2,
             <stringProp name="dataSource">Test_Pool_2</stringProp>
             <stringProp name="query">EXEC sys.sp_set_session_context @key = N&apos;application_time&apos;, @value = &apos;${__time(yyy-MM-dd HH:mm:ss.SSS,)}&apos;;
 EXEC sys.sp_set_session_context @key = N&apos;application_user&apos;, @value = &apos;${__V(user${__Random(1,10,)})}&apos;;
-
-update cuentas_bancarias set saldo=${__Random(1,9999,)} where id=${__Random(1,2,)}
+update cuentas_bancarias set saldo=${__Random(1,9999,)} where id=${__Random(1,2,)};
 </stringProp>
             <stringProp name="queryArguments"></stringProp>
             <stringProp name="queryArgumentsTypes"></stringProp>
@@ -214,8 +211,7 @@ update cuentas_bancarias set saldo=${__Random(1,9999,)} where id=${__Random(1,2,
             <stringProp name="dataSource">Test_Pool_3</stringProp>
             <stringProp name="query">EXEC sys.sp_set_session_context @key = N&apos;application_time&apos;, @value = &apos;${__time(yyy-MM-dd HH:mm:ss.SSS,)}&apos;;
 EXEC sys.sp_set_session_context @key = N&apos;application_user&apos;, @value = &apos;${__V(user${__Random(1,10,)})}&apos;;
-
-update cuentas_bancarias set saldo=${__Random(1,9999,)} where id=${__Random(1,2,)}
+update cuentas_bancarias set saldo=${__Random(1,9999,)} where id=${__Random(1,2,)};
 </stringProp>
             <stringProp name="queryArguments"></stringProp>
             <stringProp name="queryArgumentsTypes"></stringProp>

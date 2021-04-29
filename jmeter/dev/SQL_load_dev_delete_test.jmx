@@ -104,11 +104,7 @@
           <stringProp name="dataSource">Test_Pool_0</stringProp>
           <stringProp name="query">EXEC sys.sp_set_session_context @key = N&apos;application_time&apos;, @value = &apos;${__time(yyy-MM-dd HH:mm:ss.SSS,)}&apos;;
 EXEC sys.sp_set_session_context @key = N&apos;application_user&apos;, @value = &apos;${__V(user${__Random(1,10,)})}&apos;;
-
-declare @id_borrar int
-select @id_borrar = min(id) from transacciones
-if @id_borrar &gt; 0
-delete transacciones where id = @id_borrar
+delete top (1) transacciones;
 </stringProp>
           <stringProp name="queryArguments"></stringProp>
           <stringProp name="queryArgumentsTypes"></stringProp>

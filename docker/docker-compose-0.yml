@@ -161,6 +161,25 @@ services:
     networks:
       - _network
 
+# --------=== blockchain interface ===--------
+
+  interface-0:
+    image: interface
+    container_name: interface-0
+    environment:
+      - NODE=0
+      - DATABASE_USER=SA
+      - DATABASE_PASSWORD=GaarGaar1234
+      - DATABASE_SERVER=10.142.0.2
+      - DATABASE_NAME=mybank
+    depends_on:
+      - client-0
+    build:
+      context: ./interface
+      dockerfile: ../Dockerfile
+    networks:
+      - _network
+
 # --------=== Grafana ===--------
 
   sawtooth-stats-grafana:

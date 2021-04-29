@@ -64,7 +64,9 @@ EN CADA NODO
 ------------------------------------------------------------------------------------------
 sh $HOME/blockchain/scripts/run.sh
 
-sh $HOME/blockchain/scripts/run_interface.sh
+DENETER LA BLOCKCHAIN (EN CADA NODO)
+------------------------------------------------------------------------------------------
+sh $HOME/blockchain/scripts/stop.sh
 
 EN DESARROLLO
 ------------------------------------------------------------------------------------------
@@ -124,3 +126,15 @@ select @id_borrar = min(id) from transacciones
 if @id_borrar > 0
 delete transacciones where id = @id_borrar
 ```
+
+Habilitar todos los triggers en la base de datos:
+ENABLE TRIGGER ALL On DATABASE
+
+Habilitar todos los triggers en el servidor:
+ENABLE TRIGGER ALL ON SERVER
+
+Deshabilitar todos los triggers en la base de datos:
+DISABLE TRIGGER ALL ON DATABASE
+
+Deshabilitar todos los triggers en el servidor:
+DISABLE TRIGGER ALL ON SERVER
