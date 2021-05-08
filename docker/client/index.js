@@ -22,8 +22,8 @@ app.post("/saveAudit/", async (req, res) => {
   res.json(await saveAudit(data0));
 });
 
-app.get("/blocks/", async (req, res) => {
-  let data = await viewBlocks();
+app.get("/blocks/:head?", async (req, res) => {
+  let data = await viewBlocks(req.params.head);
   if (data.error) res.json(data);
   let result = { blocks: [] };
   data.data.forEach(block0 => {

@@ -6,15 +6,26 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 
 export default function Blockchain() {
     const [blocks, setBlocks] = useState([]);
+    const [previousPagesIds, setPreviousPagesIds] = useState([]);
     useEffect(() => getBlocks().then(blocks => setBlocks(blocks)), []);
     return(
         <TableContainer component={Paper}>
             <Table size="small" aria-label="a dense table">
                 <TableHead className="Head">
                     <TableRow>
-                        <TableCell align="center"></TableCell>
+                        <TableCell align="center">
+                            <button onClick={() => {
+                                if(blocks[blocks.length - 1].block_num !== "0") {
+                                    getBlocks(blocks[blocks.length - 1].previous_block_hash).then(blocks => setBlocks(blocks));
+                                    setPreviousPagesIds(previousIds => [...previousIds, blocks[0].block_hash]);
+                                }
+                            }}>Previous blocks</button>
+                            <button onClick={() => {
+                                getBlocks(previousPagesIds[previousPagesIds.length - 1]).then(blocks => setBlocks(blocks));
+                                previousPagesIds.pop();
+                            }}>Next blocks</button>
+                        </TableCell>
                         <TableCell align="center"><Box fontWeight="fontWeightBold" m={1}>Block</Box></TableCell>
-                        <TableCell align="center"><Box fontWeight="fontWeightBold" m={1}>No.</Box></TableCell>
                         <TableCell align="center"><Box fontWeight="fontWeightBold" m={1}>Transaction</Box></TableCell>
                         <TableCell align="center"><Box fontWeight="fontWeightBold" m={1}>Table</Box></TableCell>
                         <TableCell align="center"><Box fontWeight="fontWeightBold" m={1}>Application user</Box></TableCell>
@@ -27,11 +38,10 @@ export default function Blockchain() {
                 </TableHead>
                 <TableBody>
                 {
-                    blocks.map((block, index) =>
+                    blocks.map((block) =>
                         <Block
                             key={block.id}
                             block_num={block.block_num}
-                            index={blocks.length - index - 1}
                             block_hash={block.block_hash}
                             previous_block_hash={block.previous_block_hash}
                             signer_public_key={block.signer_public_key}

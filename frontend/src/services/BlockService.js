@@ -1,5 +1,5 @@
-export default async function getBlocks() {
-    return fetch(`${window.location.href.split(":")[0]}:${window.location.href.split(":")[1]}:4000/blocks`.replace("/:", ":"))
+export default async function getBlocks(head) {
+    return fetch(`${window.location.href.split(":")[0]}:${window.location.href.split(":")[1]}:4000/blocks/${head ? head : ''}`.replace("/:", ":"))
     .then(res => res.json())
     .then(response => {
         const trxs = [];
@@ -57,6 +57,6 @@ export default async function getBlocks() {
                 trxs.push(trx);
             }
         });
-        return trxs.sort((a, b) => (a.blockchain_time > b.blockchain_time) ? -1 : (b.blockchain_time > a.blockchain_time) ? 1 : 0);
+        return trxs;
     });
 }

@@ -7,13 +7,6 @@ Puertos habilitados GCP:
 3000 -> Grafana
 8086 -> Influxdb
 
-docker-compose -f $HOME/blockchain/docker/docker-compose-0.yml logs --tail=30 --follow
-docker-compose -f $HOME/blockchain/docker/docker-compose-1.yml logs --tail=30 --follow
-docker-compose -f $HOME/blockchain/docker/docker-compose-2.yml logs --tail=30 --follow
-docker-compose -f $HOME/blockchain/docker/docker-compose-3.yml logs --tail=30 --follow
-
-tail -f $HOME/blockchain/interface/interface.log
-
 EN EL NODO 0
 ---------------------------------------------------------------------------------------
 sudo ufw disable
@@ -63,6 +56,8 @@ sh $HOME/blockchain/scripts/docker_swarm.sh
 EN CADA NODO
 ------------------------------------------------------------------------------------------
 sh $HOME/blockchain/scripts/run.sh
+
+sh $HOME/blockchain/scripts/logs.sh
 
 DENETER LA BLOCKCHAIN (EN CADA NODO)
 ------------------------------------------------------------------------------------------
@@ -128,7 +123,10 @@ delete transacciones where id = @id_borrar
 ```
 
 Habilitar todos los triggers en la base de datos:
+use mybank
+go
 ENABLE TRIGGER ALL On DATABASE
+go
 
 Habilitar todos los triggers en el servidor:
 ENABLE TRIGGER ALL ON SERVER

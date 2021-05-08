@@ -5,13 +5,12 @@ import '../App.css';
 
 Modal.setAppElement('#root');
 
-export default function Block({ block_num, index, block_hash, previous_block_hash, signer_public_key, nonce, payload, table, transaction, application_user, data, client_host, blockchain_host, database_host, application_time, database_time, blockchain_time, unixDatetime }) {
+export default function Block({ block_num, block_hash, previous_block_hash, signer_public_key, nonce, payload, table, transaction, application_user, data, client_host, blockchain_host, database_host, application_time, database_time, blockchain_time, unixDatetime }) {
     const [detailsIsOpen, setDetailsIsOpen] = useState(false);
     return(
         <TableRow>
             <TableCell align="center"><button onClick={() => setDetailsIsOpen(true)}>View transaction</button></TableCell>
             <TableCell align="center">{block_num}</TableCell>
-            <TableCell align="center">{index}</TableCell>
             <TableCell align="center">{transaction}</TableCell>
             <TableCell align="center">{table}</TableCell>
             <TableCell align="center">{application_user}</TableCell>

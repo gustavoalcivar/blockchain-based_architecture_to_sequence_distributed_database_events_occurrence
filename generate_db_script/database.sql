@@ -1,3 +1,6 @@
+use master
+go
+
 DROP DATABASE IF EXISTS mybank
 go
 
@@ -28,10 +31,10 @@ go
 INSERT INTO cuentas_bancarias (moneda, id_cliente, saldo) values('USD', 2, 2900)
 go
 
-select * from transacciones
-select * from cuentas_bancarias
-select * from tipo_transaccion
-select * from clientes
+select * from mybank.dbo.transacciones
+select * from mybank.dbo.cuentas_bancarias
+select * from mybank.dbo.tipo_transaccion
+select * from mybank.dbo.clientes
 
 select * from externalactivatorqueue
 

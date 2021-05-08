@@ -6,7 +6,7 @@ const _hash = (x) =>
 class AuditState {
   constructor(context) {
     this.context = context;
-    this.timeout = 500;
+    this.timeout = 10000;
     this.stateEntries = {};
   }
 

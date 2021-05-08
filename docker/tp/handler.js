@@ -18,7 +18,6 @@ class AuditHandler extends TransactionHandler {
 
   apply(transactionProcessRequest, context) {
     let payload = decode(transactionProcessRequest.payload);
-    //console.log("payload", JSON.parse(payload));
     let auditState = new AuditState(context);
     try {
       return auditState.saveAudit(payload);

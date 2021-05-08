@@ -68,8 +68,8 @@ const saveAudit = async data => {
   return await sendRequest(data);
 };
 
-const viewBlocks = async () => {
-  const res = await fetch(`http://rest-api-${process.env.NODE}:8008/blocks`);
+const viewBlocks = async (head) => {
+  const res = await fetch(`http://rest-api-${process.env.NODE}:8008/blocks?limit=10${head ? '&head=' + head : ''}`);
   return await res.json();
 }
 
