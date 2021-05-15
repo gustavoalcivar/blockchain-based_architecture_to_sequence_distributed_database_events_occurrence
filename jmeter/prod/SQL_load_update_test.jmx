@@ -16,14 +16,15 @@
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
-          <stringProp name="LoopController.loops">1</stringProp>
+          <stringProp name="LoopController.loops">250</stringProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">250</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">0.004</stringProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+        <boolProp name="ThreadGroup.delayedStart">true</boolProp>
       </ThreadGroup>
       <hashTree>
         <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
@@ -163,7 +164,10 @@
             <stringProp name="dataSource">Test_Pool_0</stringProp>
             <stringProp name="query">EXEC sys.sp_set_session_context @key = N&apos;application_time&apos;, @value = &apos;${__time(yyy-MM-dd HH:mm:ss.SSS,)}&apos;;
 EXEC sys.sp_set_session_context @key = N&apos;application_user&apos;, @value = &apos;${__V(user${__Random(1,10,)})}&apos;;
-update cuentas_bancarias set saldo=${__Random(1,9999,)} where id=${__Random(1,2,)};
+declare @max int;
+select @max = max(id) from transacciones;
+if @max > 0
+update transacciones set monto=${__Random(1,9999,)} where id=@max;
 </stringProp>
             <stringProp name="queryArguments"></stringProp>
             <stringProp name="queryArgumentsTypes"></stringProp>
@@ -179,8 +183,10 @@ update cuentas_bancarias set saldo=${__Random(1,9999,)} where id=${__Random(1,2,
             <stringProp name="dataSource">Test_Pool_1</stringProp>
             <stringProp name="query">EXEC sys.sp_set_session_context @key = N&apos;application_time&apos;, @value = &apos;${__time(yyy-MM-dd HH:mm:ss.SSS,)}&apos;;
 EXEC sys.sp_set_session_context @key = N&apos;application_user&apos;, @value = &apos;${__V(user${__Random(1,10,)})}&apos;;
-update cuentas_bancarias set saldo=${__Random(1,9999,)} where id=${__Random(1,2,)};
-</stringProp>
+declare @max int;
+select @max = max(id) from transacciones;
+if @max > 0
+update transacciones set monto=${__Random(1,9999,)} where id=@max;</stringProp>
             <stringProp name="queryArguments"></stringProp>
             <stringProp name="queryArgumentsTypes"></stringProp>
             <stringProp name="queryTimeout"></stringProp>
@@ -195,8 +201,10 @@ update cuentas_bancarias set saldo=${__Random(1,9999,)} where id=${__Random(1,2,
             <stringProp name="dataSource">Test_Pool_2</stringProp>
             <stringProp name="query">EXEC sys.sp_set_session_context @key = N&apos;application_time&apos;, @value = &apos;${__time(yyy-MM-dd HH:mm:ss.SSS,)}&apos;;
 EXEC sys.sp_set_session_context @key = N&apos;application_user&apos;, @value = &apos;${__V(user${__Random(1,10,)})}&apos;;
-update cuentas_bancarias set saldo=${__Random(1,9999,)} where id=${__Random(1,2,)};
-</stringProp>
+declare @max int;
+select @max = max(id) from transacciones;
+if @max > 0
+update transacciones set monto=${__Random(1,9999,)} where id=@max;</stringProp>
             <stringProp name="queryArguments"></stringProp>
             <stringProp name="queryArgumentsTypes"></stringProp>
             <stringProp name="queryTimeout"></stringProp>
@@ -211,8 +219,10 @@ update cuentas_bancarias set saldo=${__Random(1,9999,)} where id=${__Random(1,2,
             <stringProp name="dataSource">Test_Pool_3</stringProp>
             <stringProp name="query">EXEC sys.sp_set_session_context @key = N&apos;application_time&apos;, @value = &apos;${__time(yyy-MM-dd HH:mm:ss.SSS,)}&apos;;
 EXEC sys.sp_set_session_context @key = N&apos;application_user&apos;, @value = &apos;${__V(user${__Random(1,10,)})}&apos;;
-update cuentas_bancarias set saldo=${__Random(1,9999,)} where id=${__Random(1,2,)};
-</stringProp>
+declare @max int;
+select @max = max(id) from transacciones;
+if @max > 0
+update transacciones set monto=${__Random(1,9999,)} where id=@max;</stringProp>
             <stringProp name="queryArguments"></stringProp>
             <stringProp name="queryArgumentsTypes"></stringProp>
             <stringProp name="queryTimeout"></stringProp>
@@ -299,44 +309,6 @@ update cuentas_bancarias set saldo=${__Random(1,9999,)} where id=${__Random(1,2,
         </ResultCollector>
         <hashTree/>
         <ResultCollector guiclass="TableVisualizer" testclass="ResultCollector" testname="View Results in Table" enabled="true">
-          <boolProp name="ResultCollector.error_logging">false</boolProp>
-          <objProp>
-            <name>saveConfig</name>
-            <value class="SampleSaveConfiguration">
-              <time>true</time>
-              <latency>true</latency>
-              <timestamp>true</timestamp>
-              <success>true</success>
-              <label>true</label>
-              <code>true</code>
-              <message>true</message>
-              <threadName>true</threadName>
-              <dataType>true</dataType>
-              <encoding>false</encoding>
-              <assertions>true</assertions>
-              <subresults>true</subresults>
-              <responseData>false</responseData>
-              <samplerData>false</samplerData>
-              <xml>false</xml>
-              <fieldNames>true</fieldNames>
-              <responseHeaders>false</responseHeaders>
-              <requestHeaders>false</requestHeaders>
-              <responseDataOnError>false</responseDataOnError>
-              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
-              <assertionsResultsToSave>0</assertionsResultsToSave>
-              <bytes>true</bytes>
-              <sentBytes>true</sentBytes>
-              <url>true</url>
-              <hostname>true</hostname>
-              <threadCounts>true</threadCounts>
-              <idleTime>true</idleTime>
-              <connectTime>true</connectTime>
-            </value>
-          </objProp>
-          <stringProp name="filename"></stringProp>
-        </ResultCollector>
-        <hashTree/>
-        <ResultCollector guiclass="GraphVisualizer" testclass="ResultCollector" testname="Graph Results" enabled="true">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
             <name>saveConfig</name>

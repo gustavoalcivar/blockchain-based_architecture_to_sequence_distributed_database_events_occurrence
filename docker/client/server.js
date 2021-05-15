@@ -53,14 +53,22 @@ const sendRequest = async payload => {
   }).finish();
 
   let data;
+  let hasClientError;
   do {
-    const res = await fetch(`http://rest-api-${process.env.NODE}:8008/batches`, {
-      method: "post",
-      body: batchListBytes,
-      headers: { "Content-Type": "application/octet-stream" }
-    });
-    data = await res.json();
-  } while(data.error != undefined);
+    try {
+      data = {};
+      hasClientError = false;
+      const res = await fetch(`http://rest-api-${process.env.NODE}:8008/batches`, {
+        method: "post",
+        body: batchListBytes,
+        headers: { "Content-Type": "application/octet-stream" }
+      });
+      data = await res.json();
+    }  catch(ex) {
+      hasClientError = true;
+      console.log("Client error", ex);
+    }
+  } while(hasClientError);
   return data;
 }
 

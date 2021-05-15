@@ -57,6 +57,6 @@ export default async function getBlocks(head) {
                 trxs.push(trx);
             }
         });
-        return trxs;
+        return trxs.sort((a,b)=> (a.blockchain_time < b.blockchain_time ? 1 : -1));
     });
 }

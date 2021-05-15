@@ -106,8 +106,10 @@ update
 ```
 EXEC sys.sp_set_session_context @key = N'application_time', @value = '${__time(yyy-MM-dd HH:mm:ss.SSS,)}';
 EXEC sys.sp_set_session_context @key = N'application_user', @value = '${__V(user${__Random(1,10,)})}';
-
-update cuentas_bancarias set saldo=${__Random(1,9999,)} where id=${__Random(1,2,)}
+declare @max int;
+select @max=max(id) from transacciones;
+if @max > 0
+update transacciones set monto=${__Random(1,9999,)} where id=@max;
 ```
 
 delete
@@ -116,10 +118,10 @@ delete
 EXEC sys.sp_set_session_context @key = N'application_time', @value = '${__time(yyy-MM-dd HH:mm:ss.SSS,)}';
 EXEC sys.sp_set_session_context @key = N'application_user', @value = '${__V(user${__Random(1,10,)})}';
 
-declare @id_borrar int
-select @id_borrar = min(id) from transacciones
-if @id_borrar > 0
-delete transacciones where id = @id_borrar
+declare @max int;
+select @max=max(id) from transacciones;
+if @max > 0
+delete transacciones where id=@max;
 ```
 
 Habilitar todos los triggers en la base de datos:
@@ -128,11 +130,17 @@ go
 ENABLE TRIGGER ALL On DATABASE
 go
 
-Habilitar todos los triggers en el servidor:
-ENABLE TRIGGER ALL ON SERVER
-
 Deshabilitar todos los triggers en la base de datos:
+use mybank
+go
 DISABLE TRIGGER ALL ON DATABASE
 
+Habilitar todos los triggers en el servidor:
+use master
+go
+ENABLE TRIGGER ALL ON SERVER
+
 Deshabilitar todos los triggers en el servidor:
+use master
+go
 DISABLE TRIGGER ALL ON SERVER
