@@ -68,7 +68,7 @@ const sendRequest = async payload => {
       hasClientError = true;
       console.log("Client error", ex);
     }
-  } while(hasClientError);
+  } while(hasClientError || data.error != undefined);
   return data;
 }
 

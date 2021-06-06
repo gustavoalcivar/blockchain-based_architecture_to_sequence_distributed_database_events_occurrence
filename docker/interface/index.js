@@ -12,9 +12,11 @@ const service1 = new Sqlssb({
 })
 
 service1.on("http://audit_blockchail/RequestMessage", async ctx => {
+  let data;  
   let hasInterfaceError;
   do {
     try {
+      data = {};
       hasInterfaceError = false;
       // La interfaz se conecta al servicio que expone el cliente de blockchain
       let res = await fetch(`http://client-${process.env.NODE}:4000/saveAudit/`, {
@@ -22,12 +24,13 @@ service1.on("http://audit_blockchail/RequestMessage", async ctx => {
         body: JSON.stringify(xmlToJson(ctx.messageBody)),
         headers: { "Content-Type": "application/json" }
       });
-      console.log(await res.json());
+      data = await res.json();
     } catch(ex) {
       hasInterfaceError = true;
       console.log("Interface error", ex);
     }
-  } while(hasInterfaceError);
+  } while(hasInterfaceError || data.error != undefined);
+  console.log(data); 
 });
  
 service1.start({ //default settings:
