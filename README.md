@@ -1,6 +1,6 @@
 # Blockchain-based architecture to sequence distributed database events occurrence
 ## Pre-requisites
-- Has 5 Ubuntu 20.04 server virtual machines / servers (4 to be blockchain nodes, 1 to be client with Apache JMeter)
+- Have 5 Ubuntu 20.04 server virtual machines / servers (4 to be blockchain nodes, 1 to be client with Apache JMeter)
 - TCP ports enabled in VM/Servers
     - 1433 -> SQL Server
     - 80 -> http - nginx
