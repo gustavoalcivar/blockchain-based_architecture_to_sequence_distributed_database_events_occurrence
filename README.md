@@ -42,7 +42,7 @@ select @@SERVERNAME
 ```
 ## Install docker and docker-compose
 On each blockchain node, execute the script ./scripts/installations.sh
-## In first blockchain node
+## On first blockchain node
 Execute
 ```sh
 sudo ufw disable
@@ -62,7 +62,7 @@ sudo exportfs -arv
 sudo systemctl enable nfs-kernel-server
 sudo systemctl start nfs-kernel-server
 ```
-## In the rest of blockchain nodes
+## On the rest of blockchain nodes
 Execute (set the corresponding hostname)
 ```sh
 sudo ufw disable
@@ -80,8 +80,7 @@ Execute
 sudo mount -a
 ```
 ## Start/restart blockchain
-Execute on each node (
-one command at a time on each server and waiting for each command to finish before executing the next)
+Execute on each node (one command at a time on each server and waiting for each command to finish before executing the next)
 ```
 sh $HOME/blockchain/scripts/restart.sh
 ```
