@@ -30,13 +30,3 @@ INSERT INTO cuentas_bancarias (moneda, id_cliente, saldo) values('USD', 1, 5120)
 go
 INSERT INTO cuentas_bancarias (moneda, id_cliente, saldo) values('USD', 2, 2900)
 go
-
-select * from mybank.dbo.transacciones
-select * from mybank.dbo.cuentas_bancarias
-select * from mybank.dbo.tipo_transaccion
-select * from mybank.dbo.clientes
-
-select * from externalactivatorqueue
-
-select * from targetqueue
-
